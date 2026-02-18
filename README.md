@@ -1,2 +1,2 @@
-# Count-your-calaries
+# Count-your-calories
 An online smoothie making platform
