@@ -1,0 +1,67 @@
+    {% load static %}
+    {%include "layout/partials/customer/wheader.html" %}
+        <section class="py-5">
+      <div class="container-fluid">
+
+        <div class="bg-secondary py-5 my-5 rounded-5" style="background: url('images/bg-leaves-img-pattern.png') no-repeat;">
+          <div class="container my-5">
+            <div class="row">
+              <div class="col-md-6 p-5">
+                <div class="section-header">
+                  <h2 class="section-title display-4">Get <span class="text-primary">25% Discount</span> on your first purchase</h2>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
+              </div>
+              <div class="col-md-6 p-5">
+                <form action="{% url 'app_core:d_reg' %}" method="POST">
+                  {% csrf_token %}
+                   <div class="mb-3">
+                    <label for="name" class="form-label">name</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="name" id="name" placeholder="Name">
+                  </div> 
+                   <div class="mb-3">
+                    <label for="name" class="form-label">Email</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="mail" id="name" placeholder="Email">
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Username</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="uname" id="name" placeholder="Username">
+                  </div>
+                  <div class="mb-3">
+                    <label for="" class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com">
+                  </div>
+                   <div class="mb-3">
+                    <label for="name" class="form-label">Contact</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="contact" id="name" placeholder="Contact">
+                  </div> 
+                  <div class="mb-3">
+                    <label for="name" class="form-label">licence_no</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="l_no" id="name" placeholder="licence_no">
+                  </div> 
+                  <div class="form-check form-check-inline mb-3">
+                    <label class="form-check-label" for="subscribe">
+                    <input class="form-check-input" type="checkbox" id="subscribe" value="subscribe">
+                    Subscribe to the newsletter</label>
+                  </div>
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-dark btn-lg">Register</button>
+                  </div>
+                </form>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    {%include "layout/partials/customer/wfooter.html" %}

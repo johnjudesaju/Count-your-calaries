@@ -1,0 +1,87 @@
+    {% load static %}
+    {%include "layout/partials/customer/wheader.html" %}
+        <section class="py-5">
+      <div class="container-fluid">
+
+        <div class="bg-secondary py-5 my-5 rounded-5" style="background: url('images/bg-leaves-img-pattern.png') no-repeat;">
+          <div class="container my-5">
+            <div class="row">
+              <div class="col-md-6 p-5">
+                <div class="section-header">
+                  <h2 class="section-title display-4">Get <span class="text-primary">25% Discount</span> on your first purchase</h2>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
+              </div>
+              <div class="col-md-6 p-5">
+                <form action="{% url 'app_dashboard:reg' %}" method="POST">
+                  {% csrf_token %}
+                   <div class="mb-3">
+                    <label for="name" class="form-label">name</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="name" id="name" placeholder="Name" required pattern="^[A-Z][a-zA-Z\s]*$" title="Name must start with a capital letter and contain only letters." >
+                  </div> <div class="mb-3">
+                    <label for="name" class="form-label">address</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="address" id="name" placeholder="address" >
+                  </div> <div class="mb-3">
+                    <label for="name" class="form-label">Email</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="mail" id="name" placeholder="Email" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Username</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="uname" id="name" placeholder="Name" required minlength="8" title="Username must be at least 8 characters long.">
+                  </div>
+                  <div class="mb-3">
+                    <label for="" class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com" required minlength="8" title="Username must be at least 8 characters
+long.">
+                  </div>
+                   <div class="mb-3">
+                    <label for="name" class="form-label">Contact</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="contact" id="name" placeholder="Contact">
+                  </div> 
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Gender</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="gender" id="name" placeholder="Gender">
+                  </div> 
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Height</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="height" id="name" placeholder="Height">
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Weight</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="weight" id="name" placeholder="Weight">
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Age</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="age" id="name" placeholder="Age">
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Location</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="loc" id="name" placeholder="Location">
+                  </div>
+                
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-dark btn-lg">Register</button>
+                  </div>
+                </form>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    {%include "layout/partials/customer/wfooter.html" %}

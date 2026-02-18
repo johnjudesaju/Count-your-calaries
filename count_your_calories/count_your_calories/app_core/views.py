@@ -1,0 +1,390 @@
+from datetime import date
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.db.models import Sum
+from app_core.models import Cart, Category, CustomIngredients, Delivery, District, Favourite, Ingredients, Location, Smoothie
+from app_dashboard.models import Customer
+from count_your_calories.users.models import User
+#from count_your_calories.app_dashboard.models import customer
+#from count_your_calories.users.models import User
+
+# def dis_entry(request):
+#     if request.method=="POST":
+#         d=request.POST.get("name")
+#         print(d)
+#         if District.objects.filter(name=d).exists():
+#             # print ("hi")
+#             return HttpResponse("<script>alert('Already Exist');window.location='/core/district';</script>")
+#         cat=District()
+#         cat.name=d
+#         cat.save()
+#         return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/district';</script>")
+#     else:
+#         return render (request, "district.html")
+    
+# def dis_view(request):
+#     d=District.objects.all()
+#     print (d)
+#     return render (request, "disview.html",{"data":d})
+
+
+# def dis_del(request,no):
+#     d=District.objects.get(id=no)
+#     d.delete()
+#     return HttpResponse("<script>alert('Deletion sucessfull');window.location='/home/dv';</script>")
+
+# def dis_upd(request,no):
+    # u=District.objects.get(id=no)
+    # if request.method=="POST":
+    #     ca=request.POST.get("name")
+    #     if District.objects.filter(name=ca).exists():
+    #         # print ("hi")
+    #         return HttpResponse("<script>alert('Already Exist');window.location='/home/dv/';</script>")
+    #     u.name=ca
+    #     u.save()
+    #     return HttpResponse("<script>alert('Updation sucessfull');window.location='/home/dv/';</script>")
+    # return render(request, "admin/editdis.html",{"vi":u})
+
+
+def loc_entry(request):
+    if request.method=="POST":
+        n=request.POST.get("name")
+        d_id=request.POST.get("dis")
+        if Location.objects.filter(name=n,district=d_id).exists():
+            # print ("hi")
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/location';</script>")
+        cat=Location()
+        cat.name=n
+        cat.district=District.objects.get(id=d_id)
+        cat.save()
+        return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/location';</script>")
+    else:
+        d=District.objects.all()
+        return render(request, "location.html",{"d_val":d})
+
+def loc_view(request):
+    l=Location.objects.all()
+    return render (request, "locview.html",{"ldata":l})
+
+def loc_del(request,no):#delete
+    d=Location.objects.get(id=no)
+    d.delete()
+    return HttpResponse ("<script>alert('Deletion sucessfull');window.location='/core/locview';</script>")
+
+def loc_upd(request,no):#update
+    #return HttpResponse("<script>alert('updated sucessfull');window.location='/home/cav';</script>")
+    d=Location.objects.get(id=no)
+    if request.method=="POST":
+        ca=request.POST.get("name")
+        des=request.POST.get("dis")
+        if Location.objects.filter(name=ca,district=des).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/locview';</script>")
+        d.name=ca
+        d.district=District.objects.get(id=des)
+        d.save()
+        return HttpResponse("<script>alert('Updation sucessfull');window.location='/core/locview/';</script>")
+    else:
+        dis=District.objects.all()
+        return render(request, "locedit.html",{"lupd":d,'dist':dis})
+    
+def cat_entry(request):
+    if request.method=="POST":
+        name=request.POST.get("name")
+        desc=request.POST.get("des")
+        if Category.objects.filter(name=id).exists():
+            # print ("hi")
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/category';</script>")
+        cat=Category()
+        cat.name=name
+        cat.desc=desc
+        if len(request.FILES) !=0:
+            cimg=request.FILES['cimg']
+            cat.img=cimg
+        cat.save()
+        return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/category';</script>")
+    else:
+        return render (request, "category.html")
+    
+def cat_view(request):
+    l=Category.objects.all()
+    return render (request, "catview.html",{"catdata":l})
+
+def cat_del(request,no):#delete
+    d=Category.objects.get(id=no)
+    d.delete()
+    return HttpResponse ("<script>alert('Deletion sucessfull');window.location='/core/catview';</script>")
+
+def cat_upd(request,no):#update
+    #return HttpResponse("<script>alert('updated sucessfull');window.location='/home/cav';</script>")
+    d=Category.objects.get(id=no)
+    if request.method=="POST":
+        ca=request.POST.get("name")
+        des=request.POST.get("des")
+        if Category.objects.filter(name=ca).exclude(id=no).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/catview/';</script>")
+        d.name=ca
+        d.desc=des
+        if len(request.FILES) !=0:
+            cimg=request.FILES['cimg']
+            d.img=cimg
+        d.save()
+        return HttpResponse("<script>alert('Updation sucessfull');window.location='/core/catview/';</script>")
+    else:
+        dis=District.objects.all()
+        return render(request, "editcategory.html",{"v":d})
+
+def card(request):
+    l=Category.objects.all()
+    return render (request, "card.html",{"card_val":l})
+
+def ing_entry(request):
+    if request.method=="POST":
+        name=request.POST.get("name")
+        avail=request.POST.get("avail")
+        price=request.POST.get("price")
+        calorie=request.POST.get("calorie")
+        if Ingredients.objects.filter(name=name).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/ingredients';</script>")
+        ing=Ingredients()
+        ing.name=name
+        ing.availability=avail
+        ing.price=price
+        ing.calorie=calorie
+        if len(request.FILES) !=0:
+            cimg=request.FILES['cimg']
+            ing.simg=cimg
+        ing.save()
+        return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/ingredients';</script>")
+    else:
+        return render (request, "ingredients.html")
+    
+def ing_view(request):
+    l=Ingredients.objects.all()
+    return render (request, "ingview.html",{"ingdata":l})
+
+def ing_del(request,no):#delete
+    d=Ingredients.objects.get(id=no)
+    d.delete()
+    return HttpResponse ("<script>alert('Deletion sucessfull');window.location='/core/ing_view';</script>")
+
+def ing_upd(request,no):#update
+    #return HttpResponse("<script>alert('updated sucessfull');window.location='/home/cav';</script>")
+    d=Ingredients.objects.get(id=no)
+    if request.method=="POST":
+        name=request.POST.get("name")
+        avail=request.POST.get("avail")
+        price=request.POST.get("price")
+        if Ingredients.objects.filter(name=name).exclude(id=no).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/ing_view/';</script>")
+        d.name=name
+        d.availability=avail
+        d.price=price
+        calorie=request.POST.get("calorie")
+        d.calorie=calorie
+        if len(request.FILES) !=0:
+            cimg=request.FILES['cimg']
+            d.simg=cimg
+        d.save()
+        return HttpResponse("<script>alert('Updation sucessfull');window.location='/core/ing_view/';</script>")
+    else:
+        return render(request, "ingupd.html",{"i":d})
+    
+def smoothie_entry(request):
+    if request.method=="POST":
+        name=request.POST.get("name")
+        ingr=request.POST.getlist("ing[]")
+        avail=request.POST.get("avail")
+        price=request.POST.get("price")
+        #print(ing)
+        if Smoothie.objects.filter(name=name).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/smoothie';</script>")
+        ing=Smoothie()
+        ing.name=name
+        ing.availability=avail
+        if len(request.FILES) !=0:
+            cimg=request.FILES['cimg']
+            ing.simg=cimg
+        ing.price=price
+        ing.save()
+        for i in ingr:
+            ing.ingredients.add(i)
+        return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/smoothie';</script>")
+    else:
+        i=Ingredients.objects.all()
+        return render (request, "smoothie.html",{"ival":i})
+    
+def smoothie_view(request):
+    l=Smoothie.objects.all()
+    return render (request, "smoothieview.html",{"smoothiedata":l})
+
+def smoothie_del(request,no):#delete
+    d=Smoothie.objects.get(id=no)
+    d.delete()
+    return HttpResponse ("<script>alert('Deletion sucessfull');window.location='/core/smoothie_view';</script>")
+
+def smoothie_upd(request,no):#update
+    #return HttpResponse("<script>alert('updated sucessfull');window.location='/home/cav';</script>")
+    d=Smoothie.objects.get(id=no)
+    ingredients = Ingredients.objects.all()
+    if request.method=="POST":
+        name=request.POST.get("name")
+        print(name)
+        ings=request.POST.getlist("ing[]")
+        avail=request.POST.get("avai")
+        if Smoothie.objects.filter(name=name).exclude(id=no).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/smoothie_view/';</script>")
+        d.name=name
+        d.availability=avail
+        d.save()
+        for i in ings:
+            d.ingredients.add(i)
+        return HttpResponse("<script>alert('Updation sucessfull');window.location='/core/smoothie_view/';</script>")
+    else:
+        return render(request, "smoothieupd.html",{"s_upd":d,"ingredients":ingredients})
+    
+def c_view(request):
+    l=Customer.objects.all()
+    return render (request, "customerview.html",{"cdata":l})
+
+def delivery_reg(request):
+    if request.method=="POST":
+        name=request.POST.get("name")
+        uname=request.POST.get("uname")
+        passwd=request.POST.get("passwd")
+        mail=request.POST.get("mail")
+        contact_no=request.POST.get("contact")
+        l_no=request.POST.get("l_no")
+        if User.objects.filter(username=uname).exists():
+            return HttpResponse("<script>alert('Already Exist');window.location='/core/delivery_reg';</script>")
+        u=User()
+        u.name=name
+        u.username=uname
+        u.set_password(passwd)
+        u.email=mail
+        u.role="delivery"
+        u.save()
+
+        d=Delivery()
+        d.contact=contact_no
+        d.licence_no=l_no
+        d.user=User.objects.get(username=uname)
+        d.save()
+        return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/delivery_reg';</script>")
+    else:
+        return render(request, "delivery_reg.html")
+    
+def delv_view(request):
+    l=Delivery.objects.filter(status="processing")
+    return render (request, "delivery_view.html",{"delv_data":l})
+    
+def delv_acpt(request,no):
+    d=Delivery.objects.get(id=no)
+    d.status="accept"
+    d.save()
+    return HttpResponse ("<script>alert('Accepted sucessfully');window.location='/core/delivery_view';</script>")
+
+def delv_rgct(request,no):
+    d=Delivery.objects.get(id=no)
+    d.status="reject"
+    d.save()
+    return HttpResponse ("<script>alert('Rejected sucessfully');window.location='/core/delivery_view';</script>")
+
+def cust_smoothieview(request):
+    s=Smoothie.objects.all()
+    if request.method=="POST":
+        print("hello")
+        quantity=request.POST.get("quantity")
+        id=request.POST.get("id")
+        price=request.POST.get("price")
+
+        c=Cart()
+        c.customer=request.user
+        c.smoothie=Smoothie.objects.get(id=id)
+        c.quantity=quantity
+        c.amount=(int(price)*int(quantity))
+        c.save()
+
+    cr=Cart.objects.filter(customer=request.user)
+    cn=Cart.objects.filter(customer=request.user).count()
+    total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
+    # total_amount = Cart.objects.filter(customer=request.user).aggregate( total=Sum(Cart('amount')))
+
+    return render (request, "customer_smoothie.html",{"custsview":s,"cart":cr,"count":cn,"total":total_amount})
+
+def custz_smoothie(request):
+    i=Ingredients.objects.all()
+    if request.method=="POST":
+        quantity=request.POST.get("quantity")
+        id=request.POST.get("id")
+        price=request.POST.get("price")
+
+        c=CustomIngredients()
+        c.Customer=request.user
+        c.ingredients=Ingredients.objects.get(id=id)
+        c.quantity=quantity
+        c.price=(int(price)*int(quantity))
+        c.save()
+
+    cr=CustomIngredients.objects.filter(Customer=request.user)
+    cn=CustomIngredients.objects.filter(Customer=request.user).count()
+    total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
+    return render (request, "customize_smoothie.html",{"custzview":i,"cr":cr,"cn":cn,"t":total_amount})
+
+def smoothie_details(request,no):
+    c=Smoothie.objects.get(id=no)
+    return render (request, "smoothie_details.html",{"sm":c})
+    
+def add_fav(request,no):
+    f=Favourite()
+    f.customer=request.user
+    f.smoothie=Smoothie.objects.get(id=no)
+    f.save()
+    return HttpResponse("<script>alert('added to fav');window.location='/core/cust_smoothie';</script>")
+
+def fav(request):
+    f=Favourite.objects.filter(customer=request.user)
+    cn=Favourite.objects.filter(customer=request.user).count()
+    return render (request, "favorite.html",{"f":f,"cn":cn})
+
+# def payment(request):
+#     dat=date.today()
+#     if request.method=="POST":
+#         amount=request.POST.get("total")
+#         # id=request.POST.get("id")
+#         b=Booking()
+#         b.customer=request.user
+#         b.date=date
+#         b.amount=amount
+#         b.status="sucessfull"
+#         b.save()
+#         return HttpResponse("<script>alert('added to fav');window.location='/core/cust_smoothie';</script>")
+#     else:
+#         c=Customer.objects.get(user=request.user)
+#         return render (request, "payment.html",{"c":c,"d":dat})
+
+# def payment(request,no):
+#     if request.method=="POST":
+#         smoothie=request.POST.getlist("smoothie[]")
+#         amount=request.POST.get("price")
+
+#         b=Booking()
+#         b.customer=request.user
+#         b.date=date.today()
+#         b.amount=request.POST.get("amount")
+#         b.save()
+#         for i in smoothie:
+#             b.smoothie.add(i)
+#         return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/smoothie';</script>")
+#     else:
+#         c=Customer.objects.filter(id=no)
+#         return render (request, "payment.html",{"c":c})
+
+
+    
+
+
+
+
+
+
+    

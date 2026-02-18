@@ -1,0 +1,29 @@
+    {% load static %}   
+    {%include "layout/partials/customer/wheader.html" %}  
+    <center>
+      <div class="offcanvas-body">
+        <div class="order-md-last">
+              <div>
+                <h6 class="my-0"></h6>
+                <small class="text-body-secondary"><img src="/media/{{sm.simg}}"></small>
+              </div>
+                  <h5 class="my-0">{{sm.name}}</h5>
+                <small class="text-body-secondary"></small>
+              </div>
+              <div>
+                  <h5 class="my-0">{{sm.price}}</h5>
+                <small class="text-body-secondary"></small>
+              </div>
+              <h4>Ingredients</h4>
+
+            {% for i in sm.ingredients%}
+              <div>
+                  <h5 class="my-0">{{i.ingredients}}</h5>
+                <small class="text-body-secondary"></small>
+              </div>
+              {% endfor %}
+          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+        </div>
+      </div>    
+      </center>
+      {%include "layout/partials/customer/wfooter.html" %}

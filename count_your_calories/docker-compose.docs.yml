@@ -1,0 +1,17 @@
+services:
+  docs:
+    image: count_your_calories_local_docs
+    container_name: count_your_calories_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - /app/.venv
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./count_your_calories:/app/count_your_calories:z
+    ports:
+      - '9000:9000'
+    command: /start-docs

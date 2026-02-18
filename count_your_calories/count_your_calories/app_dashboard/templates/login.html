@@ -1,0 +1,43 @@
+    {% load static %}
+    {%include "layout/partials/customer/wheader.html" %}
+        <section class="py-5">
+      <div class="container-fluid">
+
+        <div class="bg-secondary py-5 my-5 rounded-5" style="background: url('images/bg-leaves-img-pattern.png') no-repeat;">
+          <div class="container my-5">
+            <div class="row">
+              <div class="col-md-6 p-5">
+                <div class="section-header">
+                  <h2 class="section-title display-4">Get <span class="text-primary">25% Discount</span> on your first purchase</h2>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
+              </div>
+              <div class="col-md-6 p-5">
+                <form action="{% url 'app_dashboard:log' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Username</label>
+                    <input type="text"
+                      class="form-control form-control-lg" name="uname" id="name" placeholder="Name">
+                  </div>
+                  <div class="mb-3">
+                    <label for="" class="form-label">Password</label>
+                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com">
+                  </div>
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-dark btn-lg">Login</button>
+                  </div>
+                 <h5>Don't have an Account</h5><h6><a href="{% url 'app_dashboard:reg' %}">Register now</a></h6></div>
+                </form>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    {%include "layout/partials/customer/wfooter.html" %}
