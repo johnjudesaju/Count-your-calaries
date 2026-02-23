@@ -5,6 +5,7 @@ from django.db.models import Sum
 from app_core.models import Cart, Category, CustomIngredients, Delivery, District, Favourite, Ingredients, Location, Smoothie
 from app_dashboard.models import Customer
 from count_your_calories.users.models import User
+
 #from count_your_calories.app_dashboard.models import customer
 #from count_your_calories.users.models import User
 
@@ -97,9 +98,6 @@ def cat_entry(request):
         cat=Category()
         cat.name=name
         cat.desc=desc
-        if len(request.FILES) !=0:
-            cimg=request.FILES['cimg']
-            cat.img=cimg
         cat.save()
         return HttpResponse("<script>alert('Insertion sucessfull');window.location='/core/category';</script>")
     else:
@@ -124,9 +122,6 @@ def cat_upd(request,no):#update
             return HttpResponse("<script>alert('Already Exist');window.location='/core/catview/';</script>")
         d.name=ca
         d.desc=des
-        if len(request.FILES) !=0:
-            cimg=request.FILES['cimg']
-            d.img=cimg
         d.save()
         return HttpResponse("<script>alert('Updation sucessfull');window.location='/core/catview/';</script>")
     else:
@@ -289,10 +284,13 @@ def delv_rgct(request,no):
     d.save()
     return HttpResponse ("<script>alert('Rejected sucessfully');window.location='/core/delivery_view';</script>")
 
+def delv_v(request):
+    l=Delivery.objects.filter(status="accept")
+    return render (request, "delvv.html",{"dv":l})
+
 def cust_smoothieview(request):
     s=Smoothie.objects.all()
     if request.method=="POST":
-        print("hello")
         quantity=request.POST.get("quantity")
         id=request.POST.get("id")
         price=request.POST.get("price")
@@ -303,12 +301,17 @@ def cust_smoothieview(request):
         c.quantity=quantity
         c.amount=(int(price)*int(quantity))
         c.save()
-
     cr=Cart.objects.filter(customer=request.user)
     cn=Cart.objects.filter(customer=request.user).count()
     total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
     # total_amount = Cart.objects.filter(customer=request.user).aggregate( total=Sum(Cart('amount')))
-
+    # if sel=="high":
+    #     sm=Smoothie.objects.all().order_by("price")
+    #     return render (request, "customer_smoothie.html",{"custsview":sm,"cart":cr,"count":cn,"total":total_amount})
+    # elif sel=="low":
+    #     sm=Smoothie.objects.all().order_by("-price")
+    #     return render (request, "customer_smoothie.html",{"custsview":sm,"cart":cr,"count":cn,"total":total_amount})
+    # else:
     return render (request, "customer_smoothie.html",{"custsview":s,"cart":cr,"count":cn,"total":total_amount})
 
 def custz_smoothie(request):
@@ -316,13 +319,13 @@ def custz_smoothie(request):
     if request.method=="POST":
         quantity=request.POST.get("quantity")
         id=request.POST.get("id")
-        price=request.POST.get("price")
+        product = Ingredients.objects.get(id=id)
 
         c=CustomIngredients()
         c.Customer=request.user
         c.ingredients=Ingredients.objects.get(id=id)
         c.quantity=quantity
-        c.price=(int(price)*int(quantity))
+        c.price=(int(product.price)*int(quantity))
         c.save()
 
     cr=CustomIngredients.objects.filter(Customer=request.user)
@@ -345,6 +348,21 @@ def fav(request):
     f=Favourite.objects.filter(customer=request.user)
     cn=Favourite.objects.filter(customer=request.user).count()
     return render (request, "favorite.html",{"f":f,"cn":cn})
+
+def s_details(request,no):
+    s=Smoothie.objects.get(id=no)
+    return render (request,"smoothie_details.html",{"s":s})
+
+def cat_smoothie(request,no):
+    s=Smoothie.objects.filter(category=no)
+    return render (request,"customer_smoothie.html",{"s":s})
+
+def booking(request):
+    c=Customer.objects.get(user=request.user)
+    dat=date.today()
+    cr=Cart.objects.filter(customer=request.user)
+    total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
+    return render (request, "payment.html",{"c":c,"d":dat,"t":total_amount})
 
 # def payment(request):
 #     dat=date.today()

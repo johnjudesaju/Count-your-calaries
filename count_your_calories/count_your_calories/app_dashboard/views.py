@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from app_core.models import Category, Delivery, District, Location, Smoothie
 from django.contrib.auth import authenticate,login
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
+from django.contrib.auth import logout
 
 from app_dashboard.models import Customer
 from count_your_calories.users.models import User
@@ -11,7 +14,8 @@ from count_your_calories.users.models import User
 def appdash(request):
     return render(request, "admin_dashboard.html")
 def index(request):
-    return render (request, "index.html")
+    s=Smoothie.objects.all()
+    return render (request, "index.html",{"c":s})
 def log(request):
     if request.method == 'POST':
         uname=request.POST.get("uname")
@@ -83,4 +87,6 @@ def delv_dash(request):
     return render (request, "delivery_dash.html")
     
     
-
+def logout_view(request):
+    logout(request)
+    return HttpResponse("<script>alert('Logged out successfully');window.location='/log/';</script>")

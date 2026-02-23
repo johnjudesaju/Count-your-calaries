@@ -30,7 +30,6 @@
                             <th scope="col">no </th>
                             <th scope="col">name</th>
                             <th scope="col">description</th>
-                            <th scope="col">image</th>
                             <!-- <th scope="col">Status</th> -->
                         </tr>
                     </thead>
@@ -56,9 +55,6 @@
                             </td>
                             <td>
                                 {{i.desc}}
-                            </td>
-                            <td>
-                                <img src="/media/{{i.img}}" style="width : 100px;height: 100px;">
                             </td>
                             <td>
                                 <a href="{% url 'app_core:cat_del' i.id%}">

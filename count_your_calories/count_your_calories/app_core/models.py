@@ -13,7 +13,6 @@ class Location(models.Model):
 class Category(models.Model):
     name=models.CharField()
     desc=models.CharField()
-    img=models.ImageField(upload_to="media/",null=True)
 
 class Ingredients(models.Model):
     name=models.CharField()
@@ -26,8 +25,11 @@ class Smoothie(models.Model):
     name=models.CharField()
     ingredients=models.ManyToManyField(Ingredients)
     availability=models.CharField()
+    calorie=models.IntegerField(default="150")
     simg=models.ImageField(upload_to="smoothie/",null=True) 
     price=models.IntegerField(default="100")
+    category=models.ForeignKey(Category,on_delete=models.CASCADE,default="8",related_name="cat")
+
 
 class CustomSmoothie(models.Model):
     name=models.CharField()
@@ -50,9 +52,8 @@ class Delivery(models.Model):
 
 class Booking(models.Model):
     customer=models.ForeignKey(User,on_delete=models.CASCADE)
-    smoothie=models.ManyToManyField(Smoothie)
     date=models.DateField()
-    amount=models.CharField()
+    total_amount=models.IntegerField(null=True)
     status=models.CharField()
     
 class Cart(models.Model):
@@ -60,6 +61,12 @@ class Cart(models.Model):
     smoothie=models.ForeignKey(Smoothie,on_delete=models.CASCADE,related_name="smoothie")
     quantity=models.CharField()
     amount= models.DecimalField(max_digits=10, decimal_places=2,default=0)
+    master_id=models.ForeignKey(Booking,on_delete=models.CASCADE,null=True,blank=True,related_name="master")
+
+class Payment(models.Model):
+    date=models.DateField()
+    master_id=models.ForeignKey(Booking,on_delete=models.CASCADE,null=True,blank=True,related_name="p_mater")
+    amount=models.FloatField()
 
 class Favourite(models.Model):
     customer=models.ForeignKey(User,on_delete=models.CASCADE,related_name="f_user")

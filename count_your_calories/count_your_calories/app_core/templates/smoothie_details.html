@@ -1,29 +1,30 @@
     {% load static %}   
     {%include "layout/partials/customer/wheader.html" %}  
     <center>
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-              <div>
-                <h6 class="my-0"></h6>
-                <small class="text-body-secondary"><img src="/media/{{sm.simg}}"></small>
+ <div class="col-md-4">
+            <article class="post-item card border-0 shadow-sm p-3">
+              <div class="image-holder zoom-effect">
+                <a href="#">
+                  <img src="/media/{{s.simg}}" alt="post" class="card-img-top">
+                </a>
               </div>
-                  <h5 class="my-0">{{sm.name}}</h5>
-                <small class="text-body-secondary"></small>
+              <div class="card-body">
+                <div class="post-meta d-flex text-uppercase gap-3 my-2 align-items-center">
+                  <!-- <div class="meta-date"><svg width="16" height="16"><use xlink:href="#calendar"></use></svg>22 Aug 2021</div>
+                  <div class="meta-categories"><svg width="16" height="16"><use xlink:href="#category"></use></svg>tips & tricks</div> -->
+                </div>
+                <div class="post-header">
+                  <h3 class="post-title">
+                    <a href="#" class="text-decoration-none">{{s.name}}</a>
+                  </h3>
+                  <h5>{{s.price}} Rs</h5>
+                  {% for ingredient in s.ingredients.all %}
+                  <h5>{{ ingredient.name }}</h5>
+                  {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-success"> Add to cart </button><iconify-icon icon="uil:shopping-cart"></iconify-icon>
               </div>
-              <div>
-                  <h5 class="my-0">{{sm.price}}</h5>
-                <small class="text-body-secondary"></small>
-              </div>
-              <h4>Ingredients</h4>
-
-            {% for i in sm.ingredients%}
-              <div>
-                  <h5 class="my-0">{{i.ingredients}}</h5>
-                <small class="text-body-secondary"></small>
-              </div>
-              {% endfor %}
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </div>
-      </div>    
-      </center>
+            </article>
+          </div>
+          </center>
       {%include "layout/partials/customer/wfooter.html" %}

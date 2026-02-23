@@ -1,6 +1,6 @@
     {% load static %}   
     {%include "layout/partials/customer/wheader.html" %}  
-    
+      <center><h2>Favourites</h2></center><br>
                 <!-- <div class="tab-pane fade" id="nav-fruits" role="tabpanel" aria-labelledby="nav-fruits-tab"> -->   
                   <form action="{% url 'app_core:custz_smoothie' %}" method="POST">
                     {% csrf_token %}         

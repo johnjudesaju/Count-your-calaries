@@ -28,16 +28,16 @@
                         <i class="ti ti-briefcase fs-5"></i>
                         Delivery partners
                     </a>
-                    <a href="https://support.wrappixel.com/"
+                    <a href="{% url 'app_dashboard:logout' %}"
                         class="btn btn-outline-primary d-flex align-items-center gap-1 border-0 text-white px-6">
                         <i class="ti ti-lifebuoy fs-5"></i>
-                        Support
+                        logout
                     </a>
-                    <a href="https://www.wrappixel.com/"
+                    <!-- <a href="https://www.wrappixel.com/"
                         class="btn btn-outline-primary d-flex align-items-center gap-1 border-0 text-white px-6">
                         <i class="ti ti-gift fs-5"></i>
                         Templates
-                    </a>
+                    </a> -->
                     
                 </div>
             </div>
@@ -194,10 +194,8 @@
                                     <span class="d-flex">
                                         <iconify-icon icon="solar:home-angle-line-duotone"></iconify-icon>
                                     </span>
-                                    <span class="hide-menu">Register</span>
+                                    <span class="hide-menu">Add</span>
                                 </div>
-                                <span
-                                    class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill me-4">Pro</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item">
@@ -209,8 +207,6 @@
                                             </span>
                                             <span class="hide-menu">category</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -223,8 +219,6 @@
                                             <span class="hide-menu">Location
                                             </span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                  <li class="sidebar-item">
@@ -237,8 +231,6 @@
                                             <span class="hide-menu">Ingredients
                                             </span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -250,8 +242,6 @@
                                             </span>
                                             <span class="hide-menu">Smoothie</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <!-- <li class="sidebar-item">
@@ -325,21 +315,17 @@
                                     </span>
                                     <span class="hide-menu">View</span>
                                 </div>
-                                <span
-                                    class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill me-4">Pro</span>
                             </a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item">
                                     <a class="sidebar-link primary-hover-bg justify-content-between" target="_blank"
-                                        href="">
+                                        href="{% url 'app_core:cat_view' %}">
                                         <div class="d-flex align-items-center gap-6">
                                             <span class="d-flex">
                                                 <span class="icon-small"></span>
                                             </span>
                                             <span class="hide-menu">category</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -351,8 +337,6 @@
                                             </span>
                                             <span class="hide-menu">Location</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -364,8 +348,6 @@
                                             </span>
                                             <span class="hide-menu">Ingredients</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -377,8 +359,6 @@
                                             </span>
                                             <span class="hide-menu">Smoothie</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
@@ -390,21 +370,17 @@
                                             </span>
                                             <span class="hide-menu">Customer</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
                                     <a class="sidebar-link primary-hover-bg justify-content-between" target="_blank"
-                                        href="https://bootstrapdemos.wrappixel.com/spike/dist/main/eco-edit-product.html">
+                                        href="{% url 'app_core:dv' %}">
                                         <div class="d-flex align-items-center gap-6">
                                             <span class="d-flex">
                                                 <span class="icon-small"></span>
                                             </span>
-                                            <span class="hide-menu">Edit Product</span>
+                                            <span class="hide-menu">Delivery</span>
                                         </div>
-                                        <span
-                                            class="hide-menu badge text-bg-primary fs-1 py-1 px-2 rounded-pill">Pro</span>
                                     </a>
                                 </li>
                             </ul>
