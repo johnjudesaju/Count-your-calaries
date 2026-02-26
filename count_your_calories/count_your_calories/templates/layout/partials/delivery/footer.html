@@ -1,95 +1,214 @@
-{% load static %}
-<footer>
-        <div class="mx-auto max-w-[1280px] px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-          <div class="flex items-center justify-between gap-3 max-md:flex-col">
-            <a href="index.html" class="text-base-content flex items-center gap-3 text-xl font-semibold">
-              <span class="text-primary">
-                <svg width="32" height="32" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <g clip-path="url(#clip0_18078_104881)">
-                    <mask id="mask0_18078_104881" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="34" height="34">
-                      <path d="M25.5 0H8.5C3.80558 0 0 3.80558 0 8.5V25.5C0 30.1944 3.80558 34 8.5 34H25.5C30.1944 34 34 30.1944 34 25.5V8.5C34 3.80558 30.1944 0 25.5 0Z" fill="white" />
-                    </mask>
-                    <g mask="url(#mask0_18078_104881)">
-                      <path d="M25.5 0H8.5C3.80558 0 0 3.80558 0 8.5V25.5C0 30.1944 3.80558 34 8.5 34H25.5C30.1944 34 34 30.1944 34 25.5V8.5C34 3.80558 30.1944 0 25.5 0Z" fill="url(#paint0_linear_18078_104881)" />
-                      <path
-                        d="M16.1238 20.1522C16.511 19.662 17.2479 19.6428 17.66 20.1122L20.5526 23.41C21.1194 24.0563 20.6611 25.0689 19.8016 25.0692H14.3055C13.47 25.0692 13.0026 24.1059 13.5203 23.4501L16.1238 20.1522ZM16.1326 8.45497C16.5308 7.95801 17.286 7.95453 17.6883 8.44813L27.5164 20.5077C28.0488 21.161 27.5838 22.1395 26.741 22.1395H24.4442C24.1428 22.1395 23.8577 22.0034 23.6678 21.7694L17.7029 14.4188C17.2962 13.9175 16.5285 13.927 16.1346 14.4384L10.7303 21.454C10.5411 21.6996 10.2484 21.8435 9.9383 21.8436H7.4881C6.64925 21.8436 6.18332 20.8733 6.70783 20.2186L16.1326 8.45497Z"
-                        fill="url(#paint1_linear_18078_104881)" />
-                    </g>
-                    <path d="M25.5002 0.707886H8.50017C4.19695 0.707886 0.708496 4.19634 0.708496 8.49956V25.4996C0.708496 29.8028 4.19695 33.2912 8.50017 33.2912H25.5002C29.8034 33.2912 33.2918 29.8028 33.2918 25.4996V8.49956C33.2918 4.19634 29.8034 0.707886 25.5002 0.707886Z" stroke="url(#paint2_linear_18078_104881)" stroke-width="2" />
-                  </g>
-                  <defs>
-                    <linearGradient id="paint0_linear_18078_104881" x1="30.2812" y1="2.65625" x2="4.25" y2="32.4063" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stop-color="currentColor" />
-                      <stop offset="1" stop-color="currentColor" />
-                    </linearGradient>
-                    <linearGradient id="paint1_linear_18078_104881" x1="17.1147" y1="8.08008" x2="17.1147" y2="25.0692" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stop-color="white" />
-                      <stop offset="1" stop-color="white" stop-opacity="0.6" />
-                    </linearGradient>
-                    <linearGradient id="paint2_linear_18078_104881" x1="17.0002" y1="-0.000447931" x2="17.0002" y2="33.9996" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stop-color="white" stop-opacity="0.28" />
-                      <stop offset="1" stop-color="white" stop-opacity="0.04" />
-                    </linearGradient>
-                    <clipPath id="clip0_18078_104881">
-                      <rect width="34" height="34" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </span>
+ {% load static %}
+ <!-- <footer class="pt-4">
+          <div class="w-full px-6 mx-auto">
+            <div class="flex flex-wrap items-center -mx-3 lg:justify-between">
+              <div
+                class="w-full max-w-full px-3 mt-0 mb-6 shrink-0 lg:mb-0 lg:w-1/2 lg:flex-none">
+                <div
+                  class="text-sm leading-normal text-center text-slate-500 lg:text-left">
+                  ©
+                  <script>
+                    document.write(new Date().getFullYear() + ",");
+                  </script>
+                  made with <i class="fa fa-heart"></i> by
+                  <a
+                    href="https://www.creative-tim.com"
+                    class="font-semibold text-slate-700"
+                    target="_blank"
+                    >Creative Tim</a
+                  >
 
-              <span>Restaurant</span>
-            </a>
-            <nav class="flex items-center gap-6">
-              <a href="#about-us" class="link link-animated text-base-content/80 font-medium">About</a>
-              <a href="#services" class="link link-animated text-base-content/80 font-medium">Services</a>
-              <a href="#team" class="link link-animated text-base-content/80 font-medium">Team</a>
-              <a href="#faq" class="link link-animated text-base-content/80 font-medium">FAQ</a>
-            </nav>
-            <div class="text-base-content flex h-5 gap-4">
-              <a href="#!" rel="noopener noreferrer" aria-label="Discord">
-                <span class="icon-[tabler--brand-discord] size-5"></span>
-              </a>
-              <a href="#!" rel="noopener noreferrer" aria-label="Twitter">
-                <span class="icon-[tabler--brand-x] size-5"></span>
-              </a>
-              <a href="#!" rel="noopener noreferrer" aria-label="Github">
-                <span class="icon-[tabler--brand-github] size-5"></span>
-              </a>
+                  for a better web.
+                  <span class="w-full"> Distributed by ❤️ ThemeWagon </span>
+                </div>
+              </div>
+              <div
+                class="w-full max-w-full px-3 mt-0 shrink-0 lg:w-1/2 lg:flex-none">
+                <ul
+                  class="flex flex-wrap justify-center pl-0 mb-0 list-none lg:justify-end">
+                  <li class="nav-item">
+                    <a
+                      href="#!"
+                      class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500"
+                      >Creative Tim</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#!"
+                      class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500"
+                      >About Us</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#!"
+                      class="block px-4 pt-0 pb-1 text-sm font-normal transition-colors ease-soft-in-out text-slate-500"
+                      >Blog</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      href="#!"
+                      class="block px-4 pt-0 pb-1 pr-0 text-sm font-normal transition-colors ease-soft-in-out text-slate-500"
+                      target="_blank"
+                      >License</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
+        </footer> -->
+      </div>
+      <!-- end cards -->
+    </main>
+    <div fixed-plugin>
+      <a
+        fixed-plugin-button
+        class="bottom-7.5 right-7.5 text-xl z-990 shadow-soft-lg rounded-circle fixed cursor-pointer bg-white px-4 py-2 text-slate-700">
+        <i class="py-2 pointer-events-none fa fa-cog"> </i>
+      </a>
+      <!-- -right-90 in loc de 0-->
+      <div
+        fixed-plugin-card
+        class="z-sticky shadow-soft-3xl w-90 ease-soft -right-90 fixed top-0 left-auto flex h-full min-w-0 flex-col break-words rounded-none border-0 bg-white bg-clip-border px-2.5 duration-200">
+        <div class="px-6 pt-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
+          <div class="float-left">
+            <h5 class="mt-4 mb-0">Soft UI Configurator</h5>
+            <p>See our dashboard options.</p>
+          </div>
+          <div class="float-right mt-6">
+            <button
+              fixed-plugin-close-button
+              class="inline-block p-0 mb-4 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer hover:scale-102 leading-pro ease-soft-in tracking-tight-soft bg-150 bg-x-25 active:opacity-85 text-slate-700">
+              <i class="fa fa-close"></i>
+            </button>
+          </div>
+          <!-- End Toggle Button -->
         </div>
+        <hr
+          class="h-px mx-0 my-1 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
+        <div class="flex-auto p-6 pt-0 sm:pt-4">
+          <!-- Sidebar Backgrounds -->
+          <div>
+            <h6 class="mb-0">Sidebar Colors</h6>
+          </div>
+          <a href="javascript:void(0)">
+            <div class="my-2 text-left" sidenav-colors>
+              <span
+                class="text-xs rounded-circle h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-purple-700 to-pink-500 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-slate-700 text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700"
+                active-color
+                data-color-from="purple-700"
+                data-color-to="pink-500"
+                onclick="sidebarColor(this)"></span>
+              <span
+                class="text-xs rounded-circle h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-gray-900 to-slate-800 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700"
+                data-color-from="gray-900"
+                data-color-to="slate-800"
+                onclick="sidebarColor(this)"></span>
+              <span
+                class="text-xs rounded-circle h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-blue-600 to-cyan-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700"
+                data-color-from="blue-600"
+                data-color-to="cyan-400"
+                onclick="sidebarColor(this)"></span>
+              <span
+                class="text-xs rounded-circle h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-green-600 to-lime-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700"
+                data-color-from="green-600"
+                data-color-to="lime-400"
+                onclick="sidebarColor(this)"></span>
+              <span
+                class="text-xs rounded-circle h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-red-500 to-yellow-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700"
+                data-color-from="red-500"
+                data-color-to="yellow-400"
+                onclick="sidebarColor(this)"></span>
+              <span
+                class="text-xs rounded-circle h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-red-600 to-rose-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700"
+                data-color-from="red-600"
+                data-color-to="rose-400"
+                onclick="sidebarColor(this)"></span>
+            </div>
+          </a>
+          <!-- Sidenav Type -->
+          <div class="mt-4">
+            <h6 class="mb-0">Sidenav Type</h6>
+            <p class="text-sm leading-normal">
+              Choose between 2 different sidenav types.
+            </p>
+          </div>
+          <div class="flex">
+            <button
+              transparent-style-btn
+              class="inline-block w-full px-4 py-3 mb-2 text-xs font-bold text-center text-white uppercase align-middle transition-all border border-transparent border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500"
+              data-class="bg-transparent"
+              active-style>
+              Transparent
+            </button>
+            <button
+              white-style-btn
+              class="inline-block w-full px-4 py-3 mb-2 ml-2 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 border-fuchsia-500 bg-none text-fuchsia-500 hover:border-fuchsia-500"
+              data-class="bg-white">
+              White
+            </button>
+          </div>
+          <p class="block mt-2 text-sm leading-normal xl:hidden">
+            You can change the sidenav type just on desktop view.
+          </p>
+          <!-- Navbar Fixed -->
+          <div class="mt-4">
+            <h6 class="mb-0">Navbar Fixed</h6>
+          </div>
+          <div class="min-h-6 mb-0.5 block pl-0">
+            <input
+              navbarFixed
+              class="rounded-10 duration-250 ease-soft-in-out after:rounded-circle after:shadow-soft-2xl after:duration-250 checked:after:translate-x-5.25 h-5 relative float-left mt-1 ml-auto w-10 cursor-pointer appearance-none border border-solid border-gray-200 bg-slate-800/10 bg-none bg-contain bg-left bg-no-repeat align-top transition-all after:absolute after:top-px after:h-4 after:w-4 after:translate-x-px after:bg-white after:content-[''] checked:border-slate-800/95 checked:bg-slate-800/95 checked:bg-none checked:bg-right"
+              type="checkbox" />
+          </div>
+          <hr
+            class="h-px bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent sm:my-6" />
 
-        <div class="divider"></div>
-
-        <div class="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 lg:px-8">
-          <div class="text-base-content text-center text-base">
-            &copy;2025
-            <a href="index.html" class="text-primary">FlyonUI</a>
-            ,
-            <br class="md:hidden" />
-            Made With ❤️ for better web • Distributed by <a href="https://themewagon.com" target="_blank" class="text-primary">ThemeWagon</a>
+          <a
+            class="inline-block w-full px-6 py-3 mb-4 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer active:shadow-soft-xs hover:scale-102 active:opacity-85 leading-pro ease-soft-in tracking-tight-soft bg-150 bg-x-25 border-slate-700 text-slate-700 hover:bg-transparent hover:text-slate-700 hover:shadow-none active:bg-slate-700 active:text-white active:hover:bg-transparent active:hover:text-slate-700 active:hover:shadow-none"
+            href="https://www.creative-tim.com/learning-lab/tailwind/html/quick-start/soft-ui-dashboard/"
+            target="_blank"
+            >View documentation</a
+          >
+          <div class="w-full text-center">
+            <a
+              class="github-button"
+              href="https://github.com/creativetimofficial/soft-ui-dashboard-tailwind"
+              data-icon="octicon-star"
+              data-size="large"
+              data-show-count="true"
+              aria-label="Star creativetimofficial/soft-ui-dashboard on GitHub"
+              >Star</a
+            >
+            <h6 class="mt-4">Thank you for sharing!</h6>
+            <a
+              href="https://twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20Tailwind%20made%20by%20%40CreativeTim&hashtags=webdesign,dashboard,tailwindcss&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard-tailwind"
+              class="inline-block px-6 py-3 mb-0 mr-2 text-xs font-bold text-center text-white uppercase align-middle transition-all border-0 rounded-lg cursor-pointer hover:shadow-soft-xs hover:scale-102 active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 me-2 border-slate-700 bg-slate-700"
+              target="_blank">
+              <i class="mr-1 fab fa-twitter"></i> Tweet
+            </a>
+            <a
+              href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/soft-ui-dashboard-tailwind"
+              class="inline-block px-6 py-3 mb-0 mr-2 text-xs font-bold text-center text-white uppercase align-middle transition-all border-0 rounded-lg cursor-pointer hover:shadow-soft-xs hover:scale-102 active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 me-2 border-slate-700 bg-slate-700"
+              target="_blank">
+              <i class="mr-1 fab fa-facebook-square"></i> Share
+            </a>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
-    <!-- / Content -->
-
-    <!-- Vendors JS -->
-    <script src="{% static 'guest/dist/libs/tailwindcss-intersect/dist/observer.min.js' %}"></script>
-    <script src="{% static 'guest/dist/libs/flatpickr/dist/flatpickr.js' %}"></script>
-
-    <!-- FlyonUI JS -->
-    <script src="{% static 'guest/dist/libs/flyonui/flyonui.js' %}"></script>
-
-    <!-- Theme Utils JS -->
-    <script src="{% static 'guest/dist/js/theme-utils.js' %}"></script>
-
-    <!-- Main JS -->
-    <script src="{% static 'guest/dist/js/main.js' %}"></script>
-
-    <!-- Page JS -->
-    <script src="{% static 'guest/dist/js/landing-page-free.js' %}"></script>
-
-    <button id="scrollToTopBtn" class="btn btn-circle btn-soft btn-secondary/20 bottom-15 end-15 motion-preset-slide-right motion-duration-800 motion-delay-100 fixed absolute z-[3] hidden" aria-label="Circle Soft Icon Button"><span class="icon-[tabler--chevron-up] size-5 shrink-0"></span></button>
   </body>
+  <!-- plugin for charts  -->
+  <script src="{% static 'delivery/js/plugins/chartjs.min.js' %}" async></script>
+  <!-- plugin for scrollbar  -->
+  <script src="{% static 'delivery/js/plugins/perfect-scrollbar.min.js' %}" async></script>
+  <!-- github button -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- main script file  -->
+  <script
+    src="{% static 'delivery/js/soft-ui-dashboard-tailwind.js' %}"
+    async></script>
 </html>

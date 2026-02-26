@@ -19,19 +19,18 @@
         <div class="app-topstrip bg-dark py-6 px-3 w-100 d-lg-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center justify-content-center gap-5 mb-2 mb-lg-0">
                 <a class="d-flex justify-content-center" href="https://www.wrappixel.com/" target="_blank">
-                    <img src="{% static 'admin/assets/images/logos/logo-wrappixel.svg'%}" alt="" width="150">
+                <img src="{% static 'guests/images/cyclogo.jpg' %}" alt="logo" class="img-fluid" style=" width : 70px;height: 50px;">
+              </a>
                 </a>
-
                 <div class="d-none d-xl-flex align-items-center gap-3">
+                   <a href="{% url 'app_core:d_view' %}"
+                        class="btn btn-outline-primary d-flex align-items-center gap-1 border-0 text-white px-6">
+                        <h3 style="color: aliceblue;">Count your Calories</h3>
+                    </a>
                     <a href="{% url 'app_core:d_view' %}"
                         class="btn btn-outline-primary d-flex align-items-center gap-1 border-0 text-white px-6">
                         <i class="ti ti-briefcase fs-5"></i>
                         Delivery partners
-                    </a>
-                    <a href="{% url 'app_dashboard:logout' %}"
-                        class="btn btn-outline-primary d-flex align-items-center gap-1 border-0 text-white px-6">
-                        <i class="ti ti-lifebuoy fs-5"></i>
-                        logout
                     </a>
                     <!-- <a href="https://www.wrappixel.com/"
                         class="btn btn-outline-primary d-flex align-items-center gap-1 border-0 text-white px-6">
@@ -43,7 +42,7 @@
             </div>
 
             <div class="d-lg-flex align-items-center gap-2">
-                <h3 class="text-white mb-2 mb-lg-0 fs-5 text-center">Count your calories</h3>
+               <a href="{% url 'app_dashboard:logout' %}"> <h3 class="text-white mb-2 mb-lg-0 fs-5 text-center">Logout</h3></a>
                 <div class="d-flex align-items-center justify-content-center gap-2">
                     <!-- <div class="dropdown d-flex">
                         <a class="btn btn-outline-primary d-flex align-items-center gap-1 " href="javascript:void(0)"
@@ -138,8 +137,8 @@
             <!-- Sidebar scroll-->
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
-                    <a href="./index.html" class="text-nowrap logo-img">
-                        <img src="{% static 'admin/assets/images/logos/logo.svg'%}" alt="" />
+                    <a href="{% url 'app_dashboard:adm' %}" class="text-nowrap logo-img">
+                        <br><br><h4>Admin Dashboard</h4>
                     </a>
                     <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <i class="ti ti-x fs-8"></i>

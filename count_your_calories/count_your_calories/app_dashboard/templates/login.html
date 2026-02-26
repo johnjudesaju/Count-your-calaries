@@ -10,7 +10,13 @@
                 <div class="section-header">
                   <h2 class="section-title display-4">Get <span class="text-primary">25% Discount</span> on your first purchase</h2>
                 </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
+                <p>
+  Start your health journey with a refreshing boost! Enjoy an exclusive 25% discount 
+  on your first smoothie order with <strong>Count Your Calories</strong>. 
+  Discover nutrient-rich blends, personalized recommendations based on your BMI, 
+  and customizable smoothies crafted to match your fitness goals.
+</p>
+
               </div>
               <div class="col-md-6 p-5">
                 <form action="{% url 'app_dashboard:log' %}" method="POST">
@@ -18,11 +24,11 @@
                   <div class="mb-3">
                     <label for="name" class="form-label">Username</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="uname" id="name" placeholder="Name">
+                      class="form-control form-control-lg" name="uname" id="name" placeholder="Name" required minlength="5" title="Username must be at least 5 characters long.">
                   </div>
                   <div class="mb-3">
                     <label for="" class="form-label">Password</label>
-                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com">
+                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="Password" required minlength="8" title="Password must be at least 8 characters long." >
                   </div>
                   <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-dark btn-lg">Login</button>

@@ -1,21 +1,57 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from app_core.models import Category, Delivery, District, Location, Smoothie
+from app_core.models import Cart, Category, Delivery, District, Location, Smoothie
 from django.contrib.auth import authenticate,login
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
+from django.db.models import Count
 
 from app_dashboard.models import Customer
 from count_your_calories.users.models import User
 
 # Create your views here.
+
 def appdash(request):
-    return render(request, "admin_dashboard.html")
+
+    smoothie_data = (
+        Cart.objects.values('smoothie__name')
+        .annotate(booking_count=Count('master_id', distinct=True))
+        .order_by('-booking_count')
+    )
+
+    labels = [item['smoothie__name'] for item in smoothie_data if item['smoothie__name']]
+    data = [item['booking_count'] for item in smoothie_data if item['smoothie__name']]
+
+    seller_data = (
+        Cart.objects.values('customer__name')
+        .annotate(booking_count=Count('master_id', distinct=True))
+        .order_by('-booking_count')
+    )
+
+    lab = [item['customer__name'] for item in seller_data if item['customer__name']]
+    dat = [item['booking_count'] for item in seller_data if item['customer__name']]
+
+    context = {
+        'labels': labels,
+        'data': data,
+        'lab': lab,
+        'dat': dat,
+    }
+
+    return render(request, 'admin_dashboard.html', context)
+
 def index(request):
-    s=Smoothie.objects.all()
-    return render (request, "index.html",{"c":s})
+    s = Smoothie.objects.all()
+
+    top_smoothies = (
+        Cart.objects
+        .annotate(total_bookings=Count('master_id', distinct=True))
+        .order_by('-total_bookings')[:5]
+    )
+    return render(request, "Customer_dash.html", {"c": s,"top": top_smoothies})
+
 def log(request):
     if request.method == 'POST':
         uname=request.POST.get("uname")
@@ -89,4 +125,4 @@ def delv_dash(request):
     
 def logout_view(request):
     logout(request)
-    return HttpResponse("<script>alert('Logged out successfully');window.location='/log/';</script>")
+    return HttpResponse("<script>alert('Logged out successfully');window.location='/customerdash/';</script>")

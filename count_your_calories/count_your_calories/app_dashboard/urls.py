@@ -6,7 +6,7 @@ from app_dashboard import views
 app_name="app_dashboard"
 
 urlpatterns = [
-    path("adm/",views.appdash),
+    path("adm/",views.appdash,name="adm"),
     path("",views.index,name="index"),
     path("log/",views.log,name="log"),
     path("reg/",views.customer_reg,name="reg"),

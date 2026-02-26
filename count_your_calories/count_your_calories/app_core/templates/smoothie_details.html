@@ -20,9 +20,12 @@
                   <h5>{{s.price}} Rs</h5>
                   {% for ingredient in s.ingredients.all %}
                   <h5>{{ ingredient.name }}</h5>
+                  
                   {% endfor %}
-                </div>
                 <button type="submit" class="btn btn-success"> Add to cart </button><iconify-icon icon="uil:shopping-cart"></iconify-icon>
+                <h5>Rating</h5>
+                
+                </div>
               </div>
             </article>
           </div>

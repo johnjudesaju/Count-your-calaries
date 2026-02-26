@@ -13,28 +13,30 @@
                   <!-- Form Section -->
                   <div class="lg:col-span-4">
                     <h2 class="text-base-content mb-6 text-3xl font-semibold">Payment</h2>
-                    <form class="space-y-6" onsubmit="return false;">
+                    <form class="space-y-6" action="{% url 'app_core:payment' %}" method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="type" value="{{type}}">
                       <div class="flex gap-6 max-md:flex-col">
                         <div class="w-full">
-                          <label class="label-text" for="username">Name</label>
+                          <label class="label-text" for="username">Card Number</label>
                           <div class="input input-lg">
-                            <input type="text" class="grow" placeholder="Enter your name here..." id="username" value="{{c.user.name}}"/>
+                            <input type="text" class="grow" placeholder="Enter your name here..." id="username" />
                             <span class="icon-[tabler--user] text-base-content/80 size-5.5 my-auto ms-3 shrink-0"></span>
                           </div>
                         </div>
                         <div class="w-full">
-                          <label class="label-text" for="userphone">Phone Number</label>
+                          <label class="label-text" for="userphone">Name</label>
                           <div class="input input-lg">
-                            <input type="text" class="grow" placeholder="+1 (212) 555-1234" id="userphone" value="{{c.contact}}"/>
+                            <input type="text" class="grow" placeholder="+1 (212) 555-1234" id="userphone"/>
                             <span class="icon-[tabler--phone] text-base-content/80 size-5.5 my-auto ms-3 shrink-0"></span>
                           </div>
                         </div>
                       </div>
                       <div class="flex gap-6 max-md:flex-col">
                         <div class="w-full">
-                          <label class="label-text" for="userdate"> Date</label>
+                          <label class="label-text" for="userdate"> Expiry Date</label>
                           <div class="input input-lg">
-                            <input type="text" class="flatpickr-date grow" placeholder="06/11/25" id="userdate" value="{{d}}" />
+                            <input type="text" class="flatpickr-date grow" placeholder="06/11/25" id="userdate" />
                             <span class="icon-[tabler--calendar-event] text-base-content/80 size-5.5 my-auto ms-3 shrink-0"></span>
                           </div>
                         </div>

@@ -18,31 +18,31 @@
                    <div class="mb-3">
                     <label for="name" class="form-label">name</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="name" id="name" placeholder="Name">
+                      class="form-control form-control-lg" name="name" id="name" placeholder="Name" required pattern="^[A-Z][a-zA-Z\s]*$" title="Name must start with a capital letter and contain only letters.">
                   </div> 
                    <div class="mb-3">
                     <label for="name" class="form-label">Email</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="mail" id="name" placeholder="Email">
+                      class="form-control form-control-lg" name="mail" id="name" placeholder="Email" required>
                   </div>
                   <div class="mb-3">
                     <label for="name" class="form-label">Username</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="uname" id="name" placeholder="Username">
+                      class="form-control form-control-lg" name="uname" id="name" placeholder="Username" required minlength="8" title="Username must be at least 8 characters long.">
                   </div>
                   <div class="mb-3">
                     <label for="" class="form-label">Password</label>
-                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com">
+                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="Password"required minlength="8" title="Password must be at least 8 characters long.">
                   </div>
                    <div class="mb-3">
                     <label for="name" class="form-label">Contact</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="contact" id="name" placeholder="Contact">
+                      class="form-control form-control-lg" name="contact" id="name" placeholder="Contact" required pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number">
                   </div> 
                   <div class="mb-3">
                     <label for="name" class="form-label">licence_no</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="l_no" id="name" placeholder="licence_no">
+                      class="form-control form-control-lg" name="l_no" id="name" placeholder="licence_no" required>
                   </div> 
                   <div class="form-check form-check-inline mb-3">
                     <label class="form-check-label" for="subscribe">

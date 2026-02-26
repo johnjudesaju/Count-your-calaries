@@ -37,12 +37,6 @@ class CustomSmoothie(models.Model):
     ingredients=models.ManyToManyField(Ingredients) 
     price=models.IntegerField(default="100")
 
-class CustomIngredients(models.Model):
-    Customer=models.ForeignKey(User,on_delete=models.CASCADE,related_name="cust")
-    ingredients=models.ForeignKey(Ingredients,on_delete=models.CASCADE,related_name="ing")
-    quantity=models.IntegerField()
-    price=models.IntegerField()
-
 class Delivery(models.Model):
     licence_no=models.CharField()
     contact=models.CharField()
@@ -55,6 +49,19 @@ class Booking(models.Model):
     date=models.DateField()
     total_amount=models.IntegerField(null=True)
     status=models.CharField()
+
+class CustomBooking(models.Model):
+    customer=models.ForeignKey(User,on_delete=models.CASCADE)
+    date=models.DateField()
+    total_amount=models.IntegerField(null=True)
+    status=models.CharField()
+
+class CustomIngredients(models.Model):
+    customer=models.ForeignKey(User,on_delete=models.CASCADE,related_name="cust")
+    ingredients=models.ForeignKey(Ingredients,on_delete=models.CASCADE,related_name="ing")
+    quantity=models.IntegerField()
+    price=models.IntegerField()
+    customMaster_id=models.ForeignKey(CustomBooking,on_delete=models.CASCADE,null=True,blank=True,related_name="c_master")
     
 class Cart(models.Model):
     customer=models.ForeignKey(User,on_delete=models.CASCADE,related_name="cart_user")
@@ -66,11 +73,19 @@ class Cart(models.Model):
 class Payment(models.Model):
     date=models.DateField()
     master_id=models.ForeignKey(Booking,on_delete=models.CASCADE,null=True,blank=True,related_name="p_mater")
+    customMaster_id=models.ForeignKey(CustomBooking,on_delete=models.CASCADE,null=True,blank=True,related_name="cp_master")
+    type=models.CharField(null=True)
     amount=models.FloatField()
 
 class Favourite(models.Model):
     customer=models.ForeignKey(User,on_delete=models.CASCADE,related_name="f_user")
     smoothie=models.ForeignKey(Smoothie,on_delete=models.CASCADE,related_name="f_smoothie")
+
+class Rating(models.Model):
+    rating=models.IntegerField()
+    Customer=models.ForeignKey(User,on_delete=models.CASCADE,related_name="r_user")
+    smoothie=models.ForeignKey(Smoothie,on_delete=models.CASCADE,related_name="r_smoothie")
+    date=models.DateField()
     
     
 

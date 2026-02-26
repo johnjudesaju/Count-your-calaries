@@ -75,8 +75,7 @@
         <nav class="navbar mx-auto max-w-[1280px] rounded-b-xl px-4 sm:px-6 lg:px-8">
           <div class="w-full lg:flex lg:items-center lg:gap-2">
             <div class="navbar-start items-center justify-between max-lg:w-full">
-              <a class="text-base-content flex items-center gap-3 text-xl font-semibold" href="#">
-                <span class="text-primary">
+                <!-- <span class="text-primary">
                   <svg width="32" height="32" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g clip-path="url(#clip0_18078_104881)">
                       <mask id="mask0_18078_104881" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="34" height="34">
@@ -108,8 +107,11 @@
                       </clipPath>
                     </defs>
                   </svg>
-                </span>
-                Restaurant
+                </span> -->
+                
+                  <a href="{% url 'app_core:cust_smoothie' %}">
+                <img src="{% static 'guests/images/cyclogo.jpg' %}" alt="logo" class="img-fluid" style=" width : 70px;height: 50px;">
+              </a>
               </a>
               <div class="flex items-center gap-5 lg:hidden">
                 <a href="#contact-us" class="btn btn-primary btn-sm">Book A Table</a>

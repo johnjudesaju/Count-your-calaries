@@ -19,11 +19,13 @@
                     <label for="name" class="form-label">name</label>
                     <input type="text"
                       class="form-control form-control-lg" name="name" id="name" placeholder="Name" required pattern="^[A-Z][a-zA-Z\s]*$" title="Name must start with a capital letter and contain only letters." >
-                  </div> <div class="mb-3">
+                  </div>
+                   <div class="mb-3">
                     <label for="name" class="form-label">address</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="address" id="name" placeholder="address" >
-                  </div> <div class="mb-3">
+                      class="form-control form-control-lg" name="address" id="name" placeholder="address" required >
+                  </div> 
+                  <div class="mb-3">
                     <label for="name" class="form-label">Email</label>
                     <input type="text"
                       class="form-control form-control-lg" name="mail" id="name" placeholder="Email" required>
@@ -35,38 +37,50 @@
                   </div>
                   <div class="mb-3">
                     <label for="" class="form-label">Password</label>
-                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com" required minlength="8" title="Username must be at least 8 characters
-long.">
+                    <input type="password" class="form-control form-control-lg" name="passwd" id="email" placeholder="abc@mail.com"  required minlength="8" title="Password must be at least 8 characters long.">
                   </div>
                    <div class="mb-3">
                     <label for="name" class="form-label">Contact</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="contact" id="name" placeholder="Contact">
+                      class="form-control form-control-lg" name="contact" id="name" placeholder="Contact" required pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number">
                   </div> 
-                  <div class="mb-3">
-                    <label for="name" class="form-label">Gender</label>
-                    <input type="text"
-                      class="form-control form-control-lg" name="gender" id="name" placeholder="Gender">
-                  </div> 
+                 <div class="mb-3">
+  <label class="form-label d-block">Gender</label>
+
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+    <label class="form-check-label" for="male">Male</label>
+  </div>
+
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+    <label class="form-check-label" for="female">Female</label>
+  </div>
+
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="gender" id="other" value="other">
+    <label class="form-check-label" for="other">Other</label>
+  </div>
+</div>
                   <div class="mb-3">
                     <label for="name" class="form-label">Height</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="height" id="name" placeholder="Height">
+                      class="form-control form-control-lg" name="height" id="name" placeholder="Height (cm)" required>
                   </div>
                   <div class="mb-3">
                     <label for="name" class="form-label">Weight</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="weight" id="name" placeholder="Weight">
+                      class="form-control form-control-lg" name="weight" id="name" placeholder="Weight (kg)" required>
                   </div>
                   <div class="mb-3">
                     <label for="name" class="form-label">Age</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="age" id="name" placeholder="Age">
+                      class="form-control form-control-lg" name="age" id="name" placeholder="Age" required>
                   </div>
                   <div class="mb-3">
                     <label for="name" class="form-label">Location</label>
                     <input type="text"
-                      class="form-control form-control-lg" name="loc" id="name" placeholder="Location">
+                      class="form-control form-control-lg" name="loc" id="name" placeholder="Location" required>
                   </div>
                 
                   <div class="d-grid gap-2">

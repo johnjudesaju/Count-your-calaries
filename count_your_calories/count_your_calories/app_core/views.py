@@ -1,10 +1,12 @@
 from datetime import date
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Sum
-from app_core.models import Cart, Category, CustomIngredients, Delivery, District, Favourite, Ingredients, Location, Smoothie
+from django.db.models import Count, Sum
+from app_core.models import Booking, Cart, Category, CustomBooking, CustomIngredients, Delivery, District, Favourite, Ingredients, Location,Payment, Rating, Smoothie
 from app_dashboard.models import Customer
 from count_your_calories.users.models import User
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 #from count_your_calories.app_dashboard.models import customer
 #from count_your_calories.users.models import User
@@ -223,13 +225,14 @@ def smoothie_upd(request,no):#update
     ingredients = Ingredients.objects.all()
     if request.method=="POST":
         name=request.POST.get("name")
-        print(name)
         ings=request.POST.getlist("ing[]")
         avail=request.POST.get("avai")
+        price=request.POST.get("price")
         if Smoothie.objects.filter(name=name).exclude(id=no).exists():
             return HttpResponse("<script>alert('Already Exist');window.location='/core/smoothie_view/';</script>")
         d.name=name
         d.availability=avail
+        d.price=price
         d.save()
         for i in ings:
             d.ingredients.add(i)
@@ -288,31 +291,55 @@ def delv_v(request):
     l=Delivery.objects.filter(status="accept")
     return render (request, "delvv.html",{"dv":l})
 
-def cust_smoothieview(request):
-    s=Smoothie.objects.all()
-    if request.method=="POST":
-        quantity=request.POST.get("quantity")
-        id=request.POST.get("id")
-        price=request.POST.get("price")
+# 
+def cust_smoothieview(request, name=None):
 
-        c=Cart()
-        c.customer=request.user
-        c.smoothie=Smoothie.objects.get(id=id)
-        c.quantity=quantity
-        c.amount=(int(price)*int(quantity))
+    # Category filtering
+    if name == "bowl":
+        s = Smoothie.objects.filter(category__name="Smoothie Bowl")
+    elif name == "drinks":
+        s = Smoothie.objects.filter(category__name="Smoothie Drinks")
+    else:
+        s = Smoothie.objects.all()
+
+    # Add to cart
+    if request.method == "POST":
+        quantity = request.POST.get("quantity")
+        id = request.POST.get("id")
+        price = request.POST.get("price")
+
+        c = Cart()
+        c.customer = request.user
+        c.smoothie = Smoothie.objects.get(id=id)
+        c.quantity = quantity
+        c.amount = int(price) * int(quantity)
         c.save()
-    cr=Cart.objects.filter(customer=request.user)
-    cn=Cart.objects.filter(customer=request.user).count()
+
+    # Cart details
+    cr = Cart.objects.filter(customer=request.user, master_id__isnull=True)
+    cn = cr.count()
     total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
-    # total_amount = Cart.objects.filter(customer=request.user).aggregate( total=Sum(Cart('amount')))
-    # if sel=="high":
-    #     sm=Smoothie.objects.all().order_by("price")
-    #     return render (request, "customer_smoothie.html",{"custsview":sm,"cart":cr,"count":cn,"total":total_amount})
-    # elif sel=="low":
-    #     sm=Smoothie.objects.all().order_by("-price")
-    #     return render (request, "customer_smoothie.html",{"custsview":sm,"cart":cr,"count":cn,"total":total_amount})
-    # else:
-    return render (request, "customer_smoothie.html",{"custsview":s,"cart":cr,"count":cn,"total":total_amount})
+
+    # AJAX request
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string(
+            'product_grid.html',
+            {'custsview': s},
+            request=request
+        )
+        return JsonResponse({'html': html})
+
+    # Normal page load
+    return render(
+        request,
+        "customer_smoothie.html",
+        {
+            "custsview": s,
+            "cart": cr,
+            "count": cn,
+            "total": total_amount
+        }
+    )
 
 def custz_smoothie(request):
     i=Ingredients.objects.all()
@@ -322,14 +349,14 @@ def custz_smoothie(request):
         product = Ingredients.objects.get(id=id)
 
         c=CustomIngredients()
-        c.Customer=request.user
+        c.customer=request.user
         c.ingredients=Ingredients.objects.get(id=id)
         c.quantity=quantity
-        c.price=(int(product.price)*int(quantity))
+        c.price=(int(product.price)*(int(quantity)/100))
         c.save()
 
-    cr=CustomIngredients.objects.filter(Customer=request.user)
-    cn=CustomIngredients.objects.filter(Customer=request.user).count()
+    cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
+    cn=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True).count()
     total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
     return render (request, "customize_smoothie.html",{"custzview":i,"cr":cr,"cn":cn,"t":total_amount})
 
@@ -357,12 +384,108 @@ def cat_smoothie(request,no):
     s=Smoothie.objects.filter(category=no)
     return render (request,"customer_smoothie.html",{"s":s})
 
-def booking(request):
-    c=Customer.objects.get(user=request.user)
-    dat=date.today()
-    cr=Cart.objects.filter(customer=request.user)
-    total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
-    return render (request, "payment.html",{"c":c,"d":dat,"t":total_amount})
+def booking(request,type):
+    request.session["type"]=type
+    if type=="cart":
+        c=Customer.objects.get(user=request.user)
+        dat=date.today()
+        cr=Cart.objects.filter(customer=request.user,master_id__isnull=True)
+        total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
+        return render (request, "booking.html",{"c":c,"d":dat,"t":total_amount,"type":type})
+    elif type=="custom":
+        c=Customer.objects.get(user=request.user)
+        dat=date.today()
+        cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
+        total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
+        return render (request, "booking.html",{"c":c,"d":dat,"t":total_amount,"type":type})
+    else:
+        return HttpResponse("<script>alert('Invalid input');window.location='/core/cust_smoothie';</script>")
+        
+
+def payment(request):
+    # c=Customer.objects.get(user=request.user)
+    type=request.session.get("type")
+    if type=="cart":
+        cr=Cart.objects.filter(customer=request.user,master_id__isnull=True)
+        total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
+        if request.method=="POST":
+            b=Booking()
+            b.customer=request.user
+            b.date=date.today()
+            b.total_amount=total_amount
+            b.status="sucessfull"
+            b.save()
+
+            cr=Cart.objects.filter(customer=request.user,master_id__isnull=True)
+            for i in cr:
+                i.master_id=b
+                i.save()
+        
+            p=Payment()
+            p.date=date.today()
+            p.master_id=b
+            p.amount=total_amount
+            p.type="cart"
+            p.save()
+            return HttpResponse("<script>alert('Payment Sucessfull');window.location='/core/cust_smoothie';</script>")
+        return render (request, "payment.html",{"t":total_amount})
+    
+    else:
+        cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
+        total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
+        if request.method=="POST":
+            b=CustomBooking()
+            b.customer=request.user
+            b.date=date.today()
+            b.total_amount=total_amount
+            b.status="sucessfull"
+            b.save()
+
+            cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
+            for i in cr:
+                i.customMaster_id=b
+                i.save()
+        
+            p=Payment()
+            p.date=date.today()
+            p.customMaster_id=b
+            p.amount=total_amount
+            p.type="custom"
+            p.save()
+            return HttpResponse("<script>alert('Payment Sucessfull');window.location='/core/cust_smoothie';</script>")
+        return render (request, "payment.html",{"t":total_amount})
+    
+def seller_booking_pie_chart(request):
+    seller_data = ( Cart.objects.values('smoothie__name')
+        .annotate(booking_count=Count('master_id', distinct=True))
+            .order_by('-booking_count'))
+    labels = [item['smoothie__name'] for item in seller_data if
+    item['smoothie__name']]
+    data = [item['booking_count'] for item in seller_data if
+    item['smoothie__name']]
+    context = {
+    'labels': labels,
+    'data': data,
+    }
+    return render(request, 'reports.html', context)
+    
+# def rate_smoothie(request):
+#     if request.method == "POST":
+#         data = 
+#         smoothie = Smoothie.objects.get(id=data['smoothie_id'])
+
+#         Rating.objects.update_or_create(
+#             user=request.user,
+#             smoothie=smoothie,
+#             defaults={'value': data['rating']}
+#         )
+
+#         return JsonResponse({'status': 'success'})
+
+
+
+    
+
 
 # def payment(request):
 #     dat=date.today()

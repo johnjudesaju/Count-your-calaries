@@ -122,12 +122,11 @@
 </ul>
 {% endfor %}
 
-       
-          <a href ="{% url 'app_core:booking' %}"><button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button></a>
+          <a href ="{% url 'app_core:booking' 'cart' %}"><button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button></a>
         </div>
       </div>
     </div>
-    </form>
+
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch" aria-labelledby="Search">
       <div class="offcanvas-header justify-content-center">
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -161,6 +160,7 @@
             <div class="search-bar row bg-light p-2 my-2 rounded-4">
               <div class="col-md-4 d-none d-md-block">
                 <select class="form-select border-0 bg-transparent">
+                  
                   <option>All Categories</option>
                   <option>Groceries</option>
                   <option>Drinks</option>
@@ -235,10 +235,10 @@
 
                 <div class="offcanvas-body">
               
-                  <select class="filter-categories border-0 mb-0 me-5">
-                    <option>Shop by Catetory</option>
-                    <option><a href="">Smoothie Drinks</a></option>
-                    <option>Smoothie Bowl</option>
+                  <select class="filter-categories border-0 mb-0 me-5" id="category">
+                    <option value="">Shop by Catetory</option>
+                    <option value="drinks">Smoothie Drinks</option>
+                    <option value='bowl'>Smoothie Bowl</option>
                   </select>
               
                   <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0">
@@ -253,11 +253,8 @@
                       </ul> </li>
                       </form>
                     <a href="{% url 'app_core:custz_smoothie' %}" > <button type="button" class="btn btn-primary" > Customize Smoothie</button></a>
-                   
                   </ul>
-                
                 </div>
-
               </div>
           </div>
         </div>
@@ -267,46 +264,14 @@
                       
                 <!-- <div class="tab-pane fade" id="nav-fruits" role="tabpanel" aria-labelledby="nav-fruits-tab"> -->
                   
-                  <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-                    {% for i in custsview %}
-                    <div class="col">
-                      <div class="product-item">
-                        <span class="badge bg-success position-absolute m-3">-30%</span>
-                        <a href="{% url 'app_core:add_fav' i.id%}" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                        <figure>
-                          <a href="{% url 'app_core:s_details' i.id %}" title="Product Title">
-                            <img src="/media/{{i.simg}}"  class="tab-image">
-                          </a>
-                        </figure>
-                        <h3>{{i.name}}</h3>
-                        <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                        <span class="price" id="price-{{i.id}}" data-price="{{i.price}}">{{i.price}}</span>
-                        <form action="{% url 'app_core:cust_smoothie' %}" method="POST">
-                         {% csrf_token %}
-                         <input type="hidden" name="id" value="{{i.id}}">
-                         <input type="hidden" name="price" id="amount-{{i.id}}" value="{{i.price}}">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                              </span>
-                              <input type="text" id="quantity-{{i.id}}" name="quantity" class="form-control input-number" value="1" data-id="{{i.id}}">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                              </span>
-                          </div>
-                          <button type="submit" class="btn btn-success"> Add to cart </button><iconify-icon icon="uil:shopping-cart">
-                        </div>
-                        </form>
-                      </div>
-                    </div>
-                    {% endfor %}
-                  </div>
+                 <div id="product-container" 
+     class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+    
+    {% include "product_grid.html" %}
+
+</div>
                   <!-- / product-grid -->
+                       {%include "layout/partials/customer/wfooter.html" %}
 
 <script>
   
@@ -345,6 +310,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script> 
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -388,8 +354,47 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script> 
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const categorySelect = document.getElementById("category");
+    alert(categorySelect)
+
+    if (categorySelect) {
+      alert("this works")
+
+        categorySelect.addEventListener("change", function() {
+  alert("hii")
 
 
+            let category = this.value;
+
+            console.log("Selected:", category);  // 🔍 Debug check
+
+            if (category === "") {
+                window.location.href = "/core/cust_smoothie/";
+                return;
+            }
+
+            fetch(`/core/cust_smoothie/${category}/`, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("product-container").innerHTML = data.html;
+            })
+            .catch(error => console.error("Error:", error));
+
+        });
+
+    }
+    else{
+      alert("hellooo")
+    }
+
+});
+</script>
 
 
-    {%include "layout/partials/customer/wfooter.html" %}
