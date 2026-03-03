@@ -571,8 +571,9 @@ h1,h2,h3,h4,h5,h6 {
   text-align: center;
 }
 .product-item figure img {
-  max-height: 210px;
-  height: auto;
+ max-height: 257px;
+height: auto;
+width: 230px;
 }
 .product-item .btn-wishlist {
   position: absolute;
@@ -620,7 +621,7 @@ h1,h2,h3,h4,h5,h6 {
   color: #222222;
 }
 .product-item .product-qty {
-  width: 85px;
+  width: 100px;
 }
 .product-item .btn-link {
   text-decoration: none;

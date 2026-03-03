@@ -87,8 +87,14 @@ class Rating(models.Model):
     smoothie=models.ForeignKey(Smoothie,on_delete=models.CASCADE,related_name="r_smoothie")
     date=models.DateField()
     
-    
-
+class Deliveryupdate(models.Model):
+    date=models.DateField()
+    master_id=models.ForeignKey(Booking,on_delete=models.CASCADE,null=True,blank=True,related_name="_mater")
+    customMaster_id=models.ForeignKey(CustomBooking,on_delete=models.CASCADE,null=True,blank=True,related_name="dl_master")
+    delivery=models.ForeignKey(Delivery,on_delete=models.CASCADE,null=True,blank=True,related_name="delv")
+    type=models.CharField(null=True)
+    status_choices=[("assigned","assigned"),("inprogress","inprogress"),("completed","completed")]
+    status=models.CharField(("Enter status"),choices=status_choices,null=False,blank=False,default="completed")
 
 
 

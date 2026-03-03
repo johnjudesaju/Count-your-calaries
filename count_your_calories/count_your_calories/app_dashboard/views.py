@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from app_core.models import Cart, Category, Delivery, District, Location, Smoothie
+from app_core.models import Booking, Cart, Category, Delivery, Deliveryupdate, District, Location, Smoothie
 from django.contrib.auth import authenticate,login
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
@@ -120,7 +120,8 @@ def customer_dash(request):
     return render (request, "customer_dash.html",{"cust":s})
 
 def delv_dash(request):
-    return render (request, "delivery_dash.html")
+    delv=Deliveryupdate.objects.filter(delivery__user=request.user,status="assigned")
+    return render (request, "delivery_dash.html",{"d":delv})
     
     
 def logout_view(request):

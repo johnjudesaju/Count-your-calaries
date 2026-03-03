@@ -20,14 +20,14 @@
                         <div class="w-full">
                           <label class="label-text" for="username">Card Number</label>
                           <div class="input input-lg">
-                            <input type="text" class="grow" placeholder="Enter your name here..." id="username" />
+                            <input type="text" class="grow" placeholder="Enter your name here..." id="username" required pattern="[0-9]{16}" title="Please enter a valid 16-digit Card number"/>
                             <span class="icon-[tabler--user] text-base-content/80 size-5.5 my-auto ms-3 shrink-0"></span>
                           </div>
                         </div>
                         <div class="w-full">
                           <label class="label-text" for="userphone">Name</label>
                           <div class="input input-lg">
-                            <input type="text" class="grow" placeholder="+1 (212) 555-1234" id="userphone"/>
+                            <input type="text" class="grow" placeholder="+1 (212) 555-1234" id="userphone" required/>
                             <span class="icon-[tabler--phone] text-base-content/80 size-5.5 my-auto ms-3 shrink-0"></span>
                           </div>
                         </div>
@@ -36,7 +36,7 @@
                         <div class="w-full">
                           <label class="label-text" for="userdate"> Expiry Date</label>
                           <div class="input input-lg">
-                            <input type="text" class="flatpickr-date grow" placeholder="06/11/25" id="userdate" />
+                            <input type="text" class="flatpickr-date grow" placeholder="MM/YY" id="userdate" maxlength="5" required />
                             <span class="icon-[tabler--calendar-event] text-base-content/80 size-5.5 my-auto ms-3 shrink-0"></span>
                           </div>
                         </div>
@@ -65,12 +65,12 @@
                       <p class="text-base-content/80 mb-2 break-all">countyourcalories.gmail.com</p>
                       <p class="text-base-content/80">+148 589 2001 2466</p>
                     </div>
-                    <div class="border-base-content/20 rounded-box border p-6 text-center">
-                      <h3 class="text-base-content mb-4 text-xl font-semibold">Our Location</h3>
-                      <p class="text-base-content/80">Office 149,</p>
-                      <p class="text-base-content/80">450 South Brand Brooklyn</p>
-                      <p class="text-base-content/80">San Diego County,</p>
-                      <p class="text-base-content/80">CA 91905, USA</p>
+                     <div class="border-base-content/20 rounded-box border p-6 text-center">
+                      <h3 class="text-base-content mb-4 text-xl font-semibold">Location</h3>
+                      <p class="text-base-content/80">{{delivery.address}}</p>
+                      <p class="text-base-content/80">{{delivery.location}}</p>
+                      <p class="text-base-content/80">{{delivery.contact}}</p>
+                      <p class="text-base-content/80">{{delivery.pincode}}</p>
                     </div>
                     <p class="text-base-content text-center font-medium">
                       Opening Hours

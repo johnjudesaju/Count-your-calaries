@@ -50,4 +50,5 @@ urlpatterns = [
     path("booking/<str:type>",views.booking,name="booking"),
     path("payment/",views.payment,name="payment"),
     path('report/', views.seller_booking_pie_chart, name='report'),
+    path('remove_cart/', views.remove_cart, name='remove_cart'),
 ]

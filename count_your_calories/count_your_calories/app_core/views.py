@@ -1,9 +1,11 @@
 from datetime import date
+import json
+import random
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Count, Sum
-from app_core.models import Booking, Cart, Category, CustomBooking, CustomIngredients, Delivery, District, Favourite, Ingredients, Location,Payment, Rating, Smoothie
-from app_dashboard.models import Customer
+from app_core.models import Booking, Cart, Category, CustomBooking, CustomIngredients, Delivery, Deliveryupdate, District, Favourite, Ingredients, Location,Payment, Rating, Smoothie
+from app_dashboard.models import Customer, Deliverydetails
 from count_your_calories.users.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -293,7 +295,6 @@ def delv_v(request):
 
 # 
 def cust_smoothieview(request, name=None):
-
     # Category filtering
     if name == "bowl":
         s = Smoothie.objects.filter(category__name="Smoothie Bowl")
@@ -386,25 +387,59 @@ def cat_smoothie(request,no):
 
 def booking(request,type):
     request.session["type"]=type
+    try:
+        delivery=Deliverydetails.objects.get(customer__user=request.user)
+    except:
+        delivery=""
+    if request.method=="POST":
+        
+
+        address=request.POST.get("address")
+        loc=request.POST.get("location")
+        con=request.POST.get("contact")
+        pin=request.POST.get("pincode")
+        d=Deliverydetails.objects.get(customer__user=request.user)
+        if d:
+            d.address=address
+            d.location=loc
+            d.contact=con
+            d.pincode=pin
+            d.save()
+        else:
+            d=Deliverydetails()
+            d.address=address
+            d.location=loc
+            d.contact=con
+            d.pincode=pin
+            d.customer=Customer.objects.get(user=request.user)
+            d.save()
+        return HttpResponse("<script>alert('procceed to payment');window.location='/core/payment';</script>")
+
+
     if type=="cart":
         c=Customer.objects.get(user=request.user)
         dat=date.today()
         cr=Cart.objects.filter(customer=request.user,master_id__isnull=True)
         total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
-        return render (request, "booking.html",{"c":c,"d":dat,"t":total_amount,"type":type})
+        return render (request, "booking.html",{"c":c,"d":dat,"t":total_amount,"type":type,"delivery":delivery})
     elif type=="custom":
         c=Customer.objects.get(user=request.user)
         dat=date.today()
         cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
         total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
-        return render (request, "booking.html",{"c":c,"d":dat,"t":total_amount,"type":type})
+        return render (request, "booking.html",{"c":c,"d":dat,"t":total_amount,"type":type,"delivery":delivery})
     else:
         return HttpResponse("<script>alert('Invalid input');window.location='/core/cust_smoothie';</script>")
         
 
 def payment(request):
     # c=Customer.objects.get(user=request.user)
+    delivery=Deliverydetails.objects.get(customer__user=request.user)
     type=request.session.get("type")
+    busy_delivery_ids = Deliveryupdate.objects.filter(
+                status__in=["assigned", "inprogress"]
+                ).values_list("delivery_id", flat=True)
+    available_deliveries = Delivery.objects.exclude(id__in=busy_delivery_ids)
     if type=="cart":
         cr=Cart.objects.filter(customer=request.user,master_id__isnull=True)
         total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
@@ -427,8 +462,19 @@ def payment(request):
             p.amount=total_amount
             p.type="cart"
             p.save()
+            
+            if available_deliveries.exists():
+                random_delivery = random.choice(list(available_deliveries))
+
+                Deliveryupdate.objects.create(
+                    date=date.today(),
+                    master_id=b,          # booking object
+                    delivery=random_delivery,
+                    type="cart",
+                    status="assigned"
+                )
             return HttpResponse("<script>alert('Payment Sucessfull');window.location='/core/cust_smoothie';</script>")
-        return render (request, "payment.html",{"t":total_amount})
+        return render (request, "payment.html",{"t":total_amount,"delivery":delivery})
     
     else:
         cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
@@ -452,8 +498,18 @@ def payment(request):
             p.amount=total_amount
             p.type="custom"
             p.save()
+            if available_deliveries.exists():
+                random_delivery = random.choice(list(available_deliveries))
+
+                Deliveryupdate.objects.create(
+                    date=date.today(),
+                    master_id=b,          # booking object
+                    delivery=random_delivery,
+                    type="custom",
+                    status="assigned"
+                )
             return HttpResponse("<script>alert('Payment Sucessfull');window.location='/core/cust_smoothie';</script>")
-        return render (request, "payment.html",{"t":total_amount})
+        return render (request, "payment.html",{"t":total_amount,"delivery":delivery})
     
 def seller_booking_pie_chart(request):
     seller_data = ( Cart.objects.values('smoothie__name')
@@ -468,6 +524,19 @@ def seller_booking_pie_chart(request):
     'data': data,
     }
     return render(request, 'reports.html', context)
+
+def remove_cart(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        cart_item = Cart.objects.get(
+            id=data['cart_id'],
+            customer=request.user
+        )
+
+        cart_item.delete()
+
+        return JsonResponse({"status": "success"})
     
 # def rate_smoothie(request):
 #     if request.method == "POST":

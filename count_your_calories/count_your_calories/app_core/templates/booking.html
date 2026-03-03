@@ -8,8 +8,11 @@
                 <h2 class="text-base-content mb-4 text-2xl font-semibold md:text-3xl md:text-6xl lg:text-4xl">Get in Touch to Reserve Your Table</h2>
                 <p class="text-base-content/80 text-xl">Whether you're planning a casual dinner or a special celebration, we're here to make your experience seamless.</p>
               </div>
+                                <form action="{% url 'app_core:booking' type %}" method="post">
+                      {% csrf_token %}
               <div class="card shadow-md">
                 <div class="card-body grid gap-10 lg:grid-cols-7">
+
                   <!-- Form Section -->
                   <div class="lg:col-span-4">
                     <h2 class="text-base-content mb-6 text-3xl font-semibold">Booking Details</h2>
@@ -54,7 +57,7 @@
                         </div>
                       </div> -->
                       <br><br>
-                     <a href="{% url 'app_core:payment' %}"><button type="submit" class="btn btn-primary btn-gradient w-full">Make Payment</button></a> 
+                     <button type="submit" class="btn btn-primary btn-gradient w-full">Make Payment</button>
                    
                   </div>
                   <!-- Contact Information -->
@@ -64,13 +67,18 @@
                       <p class="text-base-content/80 mb-2 break-all">countyourcalories.gmail.com</p>
                       <p class="text-base-content/80">+148 589 2001 2466</p>
                     </div>
+                    
+                    
+                    
                     <div class="border-base-content/20 rounded-box border p-6 text-center">
-                      <h3 class="text-base-content mb-4 text-xl font-semibold">Our Location</h3>
-                      <p class="text-base-content/80">Office 149,</p>
-                      <p class="text-base-content/80">450 South Brand Brooklyn</p>
-                      <p class="text-base-content/80">San Diego County,</p>
-                      <p class="text-base-content/80">CA 91905, USA</p>
+                      <h3 class="text-base-content mb-4 text-xl font-semibold">Location</h3>
+                      <p class="text-base-content/80"><div class="input input-lg"><input type="text" class="grow" name="address" value="{{delivery.address}}" placeholder="Enter address" required> </div></p><br>
+                      <p class="text-base-content/80"><div class="input input-lg"><input type="text" class="grow" name="location" placeholder="Enter Location" value="{{delivery.location}}" required> </div></p>
+                      <p class="text-base-content/80"><div class="input input-lg"><input type="text" class="grow" name="contact" value="{{delivery.contact}}" placeholder="Enter Contact" required pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number"> </div></p>
+                      <p class="text-base-content/80"><div class="input input-lg"><input type="text" class="grow" name="pincode" value="{{delivery.pincode}}" placeholder="Enter Pincode" required pattern="[0-9]{6}" title="Please enter a valid 10-digit mobile number"></div> </p>
                     </div>
+                    
+                  
                     <p class="text-base-content text-center font-medium">
                       Opening Hours
                       <span class="text-primary">9AM - 11PM</span>
@@ -79,6 +87,7 @@
                   </div>
                 </div>
               </div>
+              </form>
             </div>
           </div>
         </section>
