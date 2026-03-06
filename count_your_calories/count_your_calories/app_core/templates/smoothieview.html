@@ -32,6 +32,7 @@
                             <th scope="col">Smoothie</th>
                             <th scope="col">Availability</th>
                             <th scope="col">price</th>
+                            <th scope="col">Calorie</th>
                             <th scope="col">Image </th>
                             <!-- <th scope="col">image</th> -->
                             <!-- <th scope="col">Status</th> -->
@@ -54,20 +55,21 @@
 
     <td>{{ i.availability }}</td>
     <td>{{ i.price }}</td>
+    <td>{{ i.calorie }}</td>
 
     <td>
         <img src="/media/{{ i.simg }}" style="width:100px;height:100px;">
     </td>
 
     <td>
-        <a href="{% url 'app_core:smoothie_del' i.id %}">
-            <button class="btn btn-danger">delete</button>
-        </a>
-    </td>
-
-    <td>
         <a href="{% url 'app_core:smoothie_upd' i.id %}">
             <button class="btn btn-success">update</button>
+        </a>
+    </td>
+    
+    <td>
+        <a href="{% url 'app_core:smoothie_del' i.id %}">
+            <button class="btn btn-danger">delete</button>
         </a>
     </td>
 </tr>

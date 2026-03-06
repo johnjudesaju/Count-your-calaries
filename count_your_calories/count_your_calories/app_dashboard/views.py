@@ -66,7 +66,7 @@ def log(request):
             elif user.role == 'delivery':
                 d=Delivery.objects.get(user=user)
                 if d.status=="accept":
-                    return HttpResponse ("<script>alert('Login sucessfull');window.location='/customerdash/';</script>")
+                    return HttpResponse ("<script>alert('Login sucessfull');window.location='/delv_dash/';</script>")
                 else:
                     return HttpResponse ("<script>alert('Login unsucessfull');window.location='/log/';</script>")
         else:
@@ -126,4 +126,4 @@ def delv_dash(request):
     
 def logout_view(request):
     logout(request)
-    return HttpResponse("<script>alert('Logged out successfully');window.location='/customerdash/';</script>")
+    return HttpResponse("<script>alert('Logged out successfully');window.location='/log/';</script>")

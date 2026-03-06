@@ -66,11 +66,11 @@
                             </td>
                             <td>
                                 <a href="{% url 'app_core:delv_acpt' i.id%}">
-                                    <button class="btn btn-danger" name="del"> Accept </button></a>
+                                    <button class="btn btn-success" name="del"> Accept </button></a>
                             </td>
                             <td>
                                 <a href="{% url 'app_core:delv_rgct' i.id%}">
-                                    <button class="btn btn-success" name="upd"> Reject </button></a>
+                                    <button class="btn btn-danger" name="upd"> Reject </button></a>
                             </td>
                             {% endfor %}
                         </tr>

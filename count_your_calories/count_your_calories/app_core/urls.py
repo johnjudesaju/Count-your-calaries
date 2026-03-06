@@ -40,15 +40,16 @@ urlpatterns = [
     path("delvv/",views.delv_v,name="dv"),
     path("cust_smoothie/",views.cust_smoothieview,name="cust_smoothie"),
 
-    path("cust_smoothie/<str:name>",views.cust_smoothieview,name="cust_smoothie"),
     path("custz_smoothie/",views.custz_smoothie,name="custz_smoothie"),
-    path("smoothie_details/<int:no>",views.smoothie_details,name="smoothie_details"),
     path("add_fav/<int:no>",views.add_fav,name="add_fav"),
     path("fav/",views.fav,name="fav"),
-    path("s_details/<int:no>",views.s_details,name="s_details"),
-    path("sdrink/<int:no>",views.cat_smoothie,name="s_drink"),
+    path("smoothie_details/<int:id>",views.smoothie_detail,name="s_details"),
     path("booking/<str:type>",views.booking,name="booking"),
     path("payment/",views.payment,name="payment"),
     path('report/', views.seller_booking_pie_chart, name='report'),
     path('remove_cart/', views.remove_cart, name='remove_cart'),
+    path("update-custom-qty/", views.update_custom_quantity, name="update_custom_qty"),
+    path('remove_ccart/', views.remove_ccart, name='remove_ccart'),
+    path('suggestion/', views.suggestion, name='suggestion'),
+
 ]

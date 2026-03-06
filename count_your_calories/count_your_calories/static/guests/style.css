@@ -573,7 +573,7 @@ h1,h2,h3,h4,h5,h6 {
 .product-item figure img {
  max-height: 257px;
 height: auto;
-width: 230px;
+width: 200px;
 }
 .product-item .btn-wishlist {
   position: absolute;
@@ -720,4 +720,51 @@ width: 230px;
   .product-thumbnail-slider {
     height: 740px;
   }
+}
+/*chat*/
+.review-card{
+transition:0.3s;
+}
+
+.review-card:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.badge{
+font-weight:500;
+border-radius:20px;
+}
+
+.card{
+border-radius:20px;
+}
+/*custz*/
+
+
+.ingredient-card{
+background:white;
+border-radius:12px;
+border:1px solid #eee;
+transition:0.3s;
+}
+
+.ingredient-card:hover{
+transform:translateY(-6px);
+box-shadow:0 12px 30px rgba(0,0,0,0.08);
+}
+
+.ingredient-img{
+height:120px;
+width:120px;
+object-fit:cover;
+border-radius:50%;
+}
+
+.smoothie-summary{
+background:#f8f9fa;
+border-radius:12px;
+box-shadow:0 8px 25px rgba(0,0,0,0.06);
+position:sticky;
+top:90px;
 }

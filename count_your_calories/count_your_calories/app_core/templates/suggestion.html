@@ -1,0 +1,94 @@
+{% include "layout/partials/customer/wheader.html" %}
+
+<section class="container py-5">
+
+<div class="text-center mb-5">
+    <h2 class="fw-bold"> Find Your Perfect Smoothie</h2>
+    <p class="text-muted">Tell us your ingredients or fitness goal and we'll recommend the best smoothie</p>
+</div>
+
+<!-- Search Box -->
+<div class="row justify-content-center mb-5">
+    <div class="col-md-6">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group input-group-lg shadow-sm">
+                <input 
+                    type="text"
+                    name="query"
+                    class="form-control"
+                    placeholder="Example: high protein, banana, weight loss..."
+                    required
+                >
+
+                <button class="btn btn-success">
+                    Recommend
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+{% if recommendations %}
+
+<h3 class="mb-4 text-center">Recommended Smoothies For You</h3>
+
+<div class="row g-4">
+
+{% for smoothie in recommendations %}
+
+<div class="col-md-4">
+
+<div class="card h-100 shadow-sm border-0">
+
+<img src="/media/{{ smoothie.simg }}" class="card-img-top" style="height:200px; object-fit:cover;">
+
+<div class="card-body">
+
+<h5 class="card-title">{{ smoothie.name }}</h5>
+
+<p class="text-muted small mb-2">
+<strong>Ingredients:</strong>
+{% for ing in smoothie.ingredients.all %}
+{{ ing.name }}{% if not forloop.last %}, {% endif %}
+{% endfor %}
+</p>
+
+<div class="d-flex justify-content-between align-items-center">
+
+<span class="badge bg-warning text-dark">
+ {{ smoothie.calorie }} kcal
+</span>
+
+<a href="{% url 'app_core:s_details' smoothie.id %}" class="btn btn-sm btn-outline-primary">
+View
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="text-center text-muted">
+    <p>No recommendations yet. Try searching for ingredients or fitness goals.</p>
+</div>
+
+{% endif %}
+
+</section>
+
+{% include "layout/partials/customer/wfooter.html" %}

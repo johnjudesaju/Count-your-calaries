@@ -1,4 +1,4 @@
-    {% load static %}       
+    {% load static %} 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -87,46 +87,54 @@
         <div class="order-md-last">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-primary">Your cart</span>
-            <span class="badge bg-primary rounded-pill">3</span>
+            <span class="badge bg-primary rounded-pill">{{count}}</span>
           </h4>
-                   {% for i in cart %}
+          {% for i in cart %}
 
 <ul class="list-group mb-3">
   <li class="list-group-item d-flex justify-content-between lh-sm cart-item"
-      data-price="{{ i.smoothie.price }}">
+    data-price="{{ i.smoothie.price }}"
+    data-id="{{ i.id }}">
 
-    <div>
-      <h6 class="my-0">{{ i.smoothie.name }}</h6>
+  <div>
+    <h6 class="my-0">{{ i.smoothie.name }}</h6>
 
-      <div class="input-group product-qty">
-        <button type="button"
-                class="quantity-left-minus btn btn-danger btn-number"
-                data-type="minus">-</button>
+    <div class="input-group product-qty">
+      <button type="button"
+              class="quantity-left-minus btn btn-danger btn-number"
+              data-type="minus">-</button>
 
-        <input type="text"
-               class="form-control input-number"
-               value="{{ i.quantity }}">
+      <input type="text"
+             class="form-control input-number"
+             value="{{ i.quantity }}">
 
-        <button type="button"
-                class="quantity-right-plus btn btn-success btn-number"
-                data-type="plus">+</button>
-      </div>
+      <button type="button"
+              class="quantity-right-plus btn btn-success btn-number"
+              data-type="plus">+</button>
     </div>
+  </div>
 
-    <!-- Item total -->
+  <div class="text-end">
     <span class="text-body-secondary item-total">
       {{ i.amount }}
     </span>
 
-  </li>
+    <!-- 🗑 Remove Button -->
+    <button class="btn btn-sm btn-outline-danger remove-item mt-2">
+      Remove
+    </button>
+  </div>
+
+</li>
 </ul>
 {% endfor %}
-  
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+ <span class="cart-total fs-5 fw-bold" id="header-cart-total" style="text-align: right;"><h3>{{ total }}</h3></span>
+
+          <a href ="{% url 'app_core:booking' 'cart' %}"><button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button></a>
         </div>
       </div>
     </div>
-    
+
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasSearch" aria-labelledby="Search">
       <div class="offcanvas-header justify-content-center">
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -160,27 +168,16 @@
             <div class="search-bar row bg-light p-2 my-2 rounded-4">
               <div class="col-md-4 d-none d-md-block">
                 <select class="form-select border-0 bg-transparent">
+                  
                   <option>All Categories</option>
-                  <option>fruits</option>
-                  <option>nuts</option>
+                  <option>Bowls</option>
+                  <option>Drinks</option>
                 </select>
               </div>
               <div class="col-11 col-md-7">
-                 <form role="search" method="GET" action="{% url 'app_core:custz_smoothie' %}" class="d-flex mt-3 gap-0">
-
-<input 
-class="form-control rounded-start rounded-0 bg-light"
-name="search"
-type="text"
-placeholder="What are you looking for?"
-value="{{request.GET.search}}"
->
-
-<button class="btn btn-dark rounded-end rounded-0" type="submit">
-Search
-</button>
-
-</form>
+                <form id="search-form" class="text-center" action="index.html" method="post">
+                  <input type="text" class="form-control border-0 bg-transparent" placeholder="Search for more than 20,000 products" />
+                </form>
               </div>
               <div class="col-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/></svg>
@@ -196,8 +193,8 @@ Search
 
             <ul class="d-flex justify-content-end list-unstyled m-0">
               <li>
-                <a href="{% url 'app_dashboard:log' %}" class="rounded-circle bg-light p-2 mx-1">
-                   <img src="{% static 'guests/images/logout-rounded.jpg' %}" style=" width : 30px;height: 30px;">
+                <a href="{% url 'app_dashboard:logout' %}" class="rounded-circle bg-light p-2 mx-1">
+                  <svg width="24" height="24" viewBox="0 0 24 24"><use xlink:href="#user"></use></svg>
                 </a>
               </li>
               <li>
@@ -217,7 +214,12 @@ Search
               </li>
             </ul>
 
-         
+            <div class="cart text-end d-none d-lg-block dropdown">
+              <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                <span class="fs-6 text-muted dropdown-toggle">Your Cart</span>
+                <span class="cart-total fs-5 fw-bold" id="header-cart-total">{{ total }}</span>
+              </button>
+            </div>
           </div>
 
         </div>
@@ -239,411 +241,30 @@ Search
                 </div>
 
                 <div class="offcanvas-body">
-
+              
+                  <select class="filter-categories border-0 mb-0 me-5" id="category">
+                    <option value="">Shop by Catetory</option>
+                    <option value="drinks">Smoothie Drinks</option>
+                    <option value='bowl'>Smoothie Bowl</option>
+                  </select>
+              
                   <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0">
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Filter</a>
                       <form action="" method="">
                       <ul class="dropdown-menu" aria-labelledby="pages">
-  <li>
-    <a href="?sort=price_asc" class="dropdown-item">
-      Low - High Price
-    </a>
-  </li>
-
-  <li>
-    <a href="?sort=price_desc" class="dropdown-item">
-      High - Low Price
-    </a>
-  </li>
-
-  <li>
-    <a href="?sort=calorie_asc" class="dropdown-item">
-      Low - High Calories
-    </a>
-  </li>
-
-  <li>
-    <a href="?sort=calorie_desc" class="dropdown-item">
-      High - Low Calories
-    </a>
-  </li>
-</ul></li>
+                        <li><a href="" class="dropdown-item">Low - High price </a></li>
+                        <li><a href="" class="dropdown-item">High - Low Price </a></li>
+                        <li><a href="index.html" class="dropdown-item">Low - High Calories </a></li>
+                        <li><a href="index.html" class="dropdown-item">High - Low Calories</a></li>
+                      </ul> </li>
                       </form>
-                     <a href="{% url 'app_core:suggestion' %}" > <button type="button" class="btn btn-primary" > suggestion</button></a>
+                    <a href="{% url 'app_core:custz_smoothie' %}" > <button type="button" class="btn btn-primary" > Customize Smoothie</button></a>
                   </ul>
                 </div>
-              
-
-                </div>
-
               </div>
           </div>
         </div>
       </div>
     </header>
-    
-                        
-                  <div class="container-fluid">
-  <div class="row">
-
-    <!-- LEFT SIDE : INGREDIENTS (8 columns) -->
-    <div class="col-lg-9">
-
-      <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3">
-
-        {% for i in custzview %}
-        <div class="col">
-          <div class="product-item">
-
-            <form action="{% url 'app_core:custz_smoothie' %}" method="POST">
-            {% csrf_token %}
-
-            <figure>
-              <img src="/media/{{i.simg}}" class="tab-image">
-            </figure>
-
-            <input type="hidden" name="id" value="{{i.id}}">
-            <input type="hidden" name="price" value="{{i.price}}">
-
-            <h5>{{i.name}}</h5>
-
-            <span class="price"
-                  id="price-{{i.id}}"
-                  data-price="{{i.price}}">
-                  <h6>kcal {{i.calorie}}<br>₹{{i.price}}</h6>
-                 
-            </span>
-
-            <div class="d-flex align-items-center justify-content-between">
-
-              <div class="input-group product-qty">
-
-                <button type="button"
-                        class="quantity-left-minus btn btn-danger btn-number"
-                        data-type="minus">-</button>
-
-                <input type="text"
-                       name="quantity"
-                       class="form-control input-number"
-                       value="100">
-
-                <button type="button"
-                        class="quantity-right-plus btn btn-success btn-number"
-                        data-type="plus">+</button>
-
-              </div>
-
-              <button type="submit" class="btn btn-primary">
-                Add
-              </button>
-
-            </div>
-
-            </form>
-
-          </div>
-        </div>
-        {% endfor %}
-
-      </div>
-
-    </div>
-
-    <!-- RIGHT SIDE : CART (4 columns) -->
-    <div class="col-lg-3">
-
-      <div class="card shadow-sm sticky-top" style="top:20px;">
-        <div class="card-body">
-
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Your Smoothie</span>
-            <span class="badge bg-primary rounded-pill">{{ cn }}</span>
-          </h4>
-
-          {% for i in cr %}
-
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm cart-item"
-                data-price="{{ i.ingredients.price }}"
-                data-id="{{ i.id }}">
-
-              <div>
-                <h6 class="my-0">{{ i.ingredients.name }}</h6>
-
-                <div class="input-group product-qty">
-
-                  <button type="button"
-                          class="quantity-left-minus btn btn-danger btn-number"
-                          data-type="minus">-</button>
-
-                  <input type="text"
-                         class="form-control input-number"
-                         value="{{ i.quantity }}">
-
-                  <button type="button"
-                          class="quantity-right-plus btn btn-success btn-number"
-                          data-type="plus">+</button>
-
-                </div>
-              </div>
-
-              <div class="text-end">
-
-                <span class="text-body-secondary item-total">
-                  {{ i.price }}
-                </span>
-
-                <br>
-
-                <button class="btn btn-sm btn-outline-danger remove-item mt-2">
-                  X
-                </button>
-
-              </div>
-
-            </li>
-          </ul>
-
-          {% endfor %}
-
-          <h5 class="text-center">
-            ₹ <span id="cart-total">{{ t }}</span>
-          </h5>
-
-          <a href="{% url 'app_core:booking' 'custom' %}">
-            <button class="w-100 btn btn-primary btn-lg">
-              Continue to checkout
-            </button>
-          </a>
-
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-     
-<script>
-  
-document.addEventListener("DOMContentLoaded", function() {
-
-    document.querySelectorAll(".btn-number").forEach(button => {
-        button.addEventListener("click", function() {
-
-            let type = this.getAttribute("data-type");//minus/plus
-            let container = this.closest(".product-item");//div
-
-            let qtyInput = container.querySelector(".input-number");//quantity
-            let priceDisplay = container.querySelector(".price");
-            let priceInput = container.querySelector("input[name='price']");
-
-            let quantity = parseInt(qtyInput.value);
-            let unitPrice = parseFloat(priceDisplay.getAttribute("data-price"));
-
-            if (type === "plus") {
-                quantity += 1;
-            } else if (type === "minus" && quantity > 1) {
-                quantity -= 1;
-            }
-
-            qtyInput.value = quantity;
-
-            let total = unitPrice * quantity/100;
-
-            // Update visible price
-            priceDisplay.innerText = total;
-
-            // Update form price input (very important)
-            //priceInput.value = total;
-        });
-    });
-
-});
-</script> 
-
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    function updateCart() {
-        let grandTotal = 0;
-
-        document.querySelectorAll(".cart-item").forEach(item => {
-            let unitPrice = parseFloat(item.dataset.price);
-            let qtyInput = item.querySelector(".input-number");
-            let quantity = parseInt(qtyInput.value);
-
-            let itemTotal = unitPrice * quantity;
-
-            item.querySelector(".item-total").innerText = itemTotal.toFixed(2);
-
-            grandTotal += itemTotal;
-        });
-
-        document.getElementById("cart-total").innerText = grandTotal.toFixed(2);
-    }
-
-    document.querySelectorAll(".btn-number").forEach(button => {
-        button.addEventListener("click", function() {
-
-            let item = this.closest(".cart-item");
-            let qtyInput = item.querySelector(".input-number");
-            let quantity = parseInt(qtyInput.value);
-
-            if (this.dataset.type === "plus") {
-                quantity++;
-            } else if (this.dataset.type === "minus" && quantity > 1) {
-                quantity--;
-            }
-
-            qtyInput.value = quantity;
-
-            updateCart();
-        });
-    });
-
-});
-</script>  -->
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    function updateCartUI() {
-        let grandTotal = 0;
-
-        document.querySelectorAll(".cart-item").forEach(item => {
-            let itemTotal = parseFloat(item.querySelector(".item-total").innerText);
-            grandTotal += itemTotal;
-        });
-
-        document.getElementById("cart-total").innerText = grandTotal.toFixed(2);
-    }
-
-    document.querySelectorAll(".btn-number").forEach(button => {
-        button.addEventListener("click", function() {
-
-            let item = this.closest(".cart-item");
-            let qtyInput = item.querySelector(".input-number");
-            let quantity = parseInt(qtyInput.value);
-            let itemId = item.dataset.id;
-
-            if (this.dataset.type === "plus") {
-                quantity++;
-            } else if (this.dataset.type === "minus" && quantity > 1) {
-                quantity--;
-            }
-
-            qtyInput.value = quantity;
-
-            fetch("{% url 'app_core:update_custom_qty' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({
-                    item_id: itemId,
-                    quantity: quantity
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    item.querySelector(".item-total").innerText =
-                        parseFloat(data.item_total).toFixed(2);
-
-                    updateCartUI();
-                }
-            });
-
-        });
-    });
-
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    // REMOVE ITEM
-    document.querySelectorAll(".remove-item").forEach(button => {
-        button.addEventListener("click", function() {
-
-            let item = this.closest(".cart-item");
-            let itemId = item.dataset.id;
-
-            fetch("{% url 'app_core:remove_ccart' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({
-                    cart_id: itemId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    item.remove();
-                    updateCartUI();  // recalc total
-                }
-            });
-
-        });
-    });
-
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    function updateCartUI() {
-        let grandTotal = 0;
-
-        document.querySelectorAll(".cart-item").forEach(item => {
-            let itemTotal = parseFloat(
-                item.querySelector(".item-total").innerText
-            ) || 0;
-
-            grandTotal += itemTotal;
-        });
-
-        document.getElementById("cart-total").innerText =
-            grandTotal.toFixed(2);
-    }
-
-    // REMOVE
-    document.querySelectorAll(".remove-item").forEach(button => {
-        button.addEventListener("click", function () {
-
-            let item = this.closest(".cart-item");
-            let itemId = item.dataset.id;
-
-            fetch("{% url 'app_core:remove_ccart' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({ cart_id: itemId })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === "success") {
-                    item.closest("ul").remove(); // remove full list group
-                    updateCartUI(); // 🔥 update total
-                }
-            });
-
-        });
-    });
-
-});
-</script>
-
-    {%include "layout/partials/customer/wfooter.html" %}
-
     

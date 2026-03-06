@@ -61,6 +61,7 @@ class CustomIngredients(models.Model):
     ingredients=models.ForeignKey(Ingredients,on_delete=models.CASCADE,related_name="ing")
     quantity=models.IntegerField()
     price=models.IntegerField()
+    calorie=models.IntegerField(blank=True,null=True)
     customMaster_id=models.ForeignKey(CustomBooking,on_delete=models.CASCADE,null=True,blank=True,related_name="c_master")
     
 class Cart(models.Model):
@@ -96,6 +97,25 @@ class Deliveryupdate(models.Model):
     status_choices=[("assigned","assigned"),("inprogress","inprogress"),("completed","completed")]
     status=models.CharField(("Enter status"),choices=status_choices,null=False,blank=False,default="completed")
 
+class Review(models.Model):
+    smoothie = models.ForeignKey(
+        Smoothie,
+        on_delete=models.CASCADE,
+        related_name="reviews"
+    )
+    customer = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+    rating = models.IntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('smoothie', 'customer')
+
+    def __str__(self):
+        return f"{self.customer.username} - {self.rating}"
 
 
 

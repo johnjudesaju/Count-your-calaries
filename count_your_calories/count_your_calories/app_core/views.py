@@ -3,8 +3,8 @@ import json
 import random
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Count, Sum
-from app_core.models import Booking, Cart, Category, CustomBooking, CustomIngredients, Delivery, Deliveryupdate, District, Favourite, Ingredients, Location,Payment, Rating, Smoothie
+from django.db.models import Avg, Count, Sum
+from app_core.models import Booking, Cart, Category, CustomBooking, CustomIngredients, Delivery, Deliveryupdate, District, Favourite, Ingredients, Location,Payment, Rating, Review, Smoothie
 from app_dashboard.models import Customer, Deliverydetails
 from count_your_calories.users.models import User
 from django.http import JsonResponse
@@ -229,12 +229,14 @@ def smoothie_upd(request,no):#update
         name=request.POST.get("name")
         ings=request.POST.getlist("ing[]")
         avail=request.POST.get("avai")
+        calorie=request.POST.get("calorie")
         price=request.POST.get("price")
         if Smoothie.objects.filter(name=name).exclude(id=no).exists():
             return HttpResponse("<script>alert('Already Exist');window.location='/core/smoothie_view/';</script>")
         d.name=name
         d.availability=avail
         d.price=price
+        d.calorie=calorie
         d.save()
         for i in ings:
             d.ingredients.add(i)
@@ -294,15 +296,29 @@ def delv_v(request):
     return render (request, "delvv.html",{"dv":l})
 
 # 
-def cust_smoothieview(request, name=None):
+def cust_smoothieview(request):
     # Category filtering
-    if name == "bowl":
-        s = Smoothie.objects.filter(category__name="Smoothie Bowl")
-    elif name == "drinks":
-        s = Smoothie.objects.filter(category__name="Smoothie Drinks")
-    else:
-        s = Smoothie.objects.all()
+    
+    s = Smoothie.objects.all()
+    
+    category = request.GET.get('category')
+    search=request.GET.get('search')
+    sort = request.GET.get('sort')
+    if search:
+        s = s.filter(name__icontains=search)
+    if category:
+        s = s.filter(category_id=category)
+    if sort == "price_asc":
+        s = s.order_by('price')
 
+    elif sort == "price_desc":
+        s = s.order_by('-price')
+
+    elif sort == "calorie_asc":
+        s = s.order_by('calorie')
+
+    elif sort == "calorie_desc":
+        s = s.order_by('-calorie')
     # Add to cart
     if request.method == "POST":
         quantity = request.POST.get("quantity")
@@ -320,7 +336,7 @@ def cust_smoothieview(request, name=None):
     cr = Cart.objects.filter(customer=request.user, master_id__isnull=True)
     cn = cr.count()
     total_amount = cr.aggregate(total=Sum('amount'))['total'] or 0
-
+    category=Category.objects.all()
     # AJAX request
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string(
@@ -335,6 +351,7 @@ def cust_smoothieview(request, name=None):
         request,
         "customer_smoothie.html",
         {
+            "category":category,
             "custsview": s,
             "cart": cr,
             "count": cn,
@@ -344,6 +361,24 @@ def cust_smoothieview(request, name=None):
 
 def custz_smoothie(request):
     i=Ingredients.objects.all()
+    search=request.GET.get('search')
+    sort = request.GET.get('sort')
+
+    if search:
+        i = i.filter(name__icontains=search)
+        
+    if sort == "price_asc":
+        i = i.order_by('price')
+
+    elif sort == "price_desc":
+        i= i.order_by('-price')
+
+    elif sort == "calorie_asc":
+        i = i.order_by('calorie')
+
+    elif sort == "calorie_desc":
+        i = i.order_by('-calorie')
+
     if request.method=="POST":
         quantity=request.POST.get("quantity")
         id=request.POST.get("id")
@@ -354,16 +389,13 @@ def custz_smoothie(request):
         c.ingredients=Ingredients.objects.get(id=id)
         c.quantity=quantity
         c.price=(int(product.price)*(int(quantity)/100))
+        # c.calorie = product.calorie * quantity/100
         c.save()
 
     cr=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True)
     cn=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True).count()
     total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
     return render (request, "customize_smoothie.html",{"custzview":i,"cr":cr,"cn":cn,"t":total_amount})
-
-def smoothie_details(request,no):
-    c=Smoothie.objects.get(id=no)
-    return render (request, "smoothie_details.html",{"sm":c})
     
 def add_fav(request,no):
     f=Favourite()
@@ -376,14 +408,6 @@ def fav(request):
     f=Favourite.objects.filter(customer=request.user)
     cn=Favourite.objects.filter(customer=request.user).count()
     return render (request, "favorite.html",{"f":f,"cn":cn})
-
-def s_details(request,no):
-    s=Smoothie.objects.get(id=no)
-    return render (request,"smoothie_details.html",{"s":s})
-
-def cat_smoothie(request,no):
-    s=Smoothie.objects.filter(category=no)
-    return render (request,"customer_smoothie.html",{"s":s})
 
 def booking(request,type):
     request.session["type"]=type
@@ -538,6 +562,70 @@ def remove_cart(request):
 
         return JsonResponse({"status": "success"})
     
+
+def update_custom_quantity(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        try:
+            item = CustomIngredients.objects.get(
+                id=data['item_id'],
+                customer=request.user
+            )
+
+            item.quantity = int(data['quantity'])
+            item.price = item.ingredients.price * item.quantity/100
+            item.save()
+
+            return JsonResponse({
+                "status": "success",
+                "item_total": item.price
+            })
+
+        except CustomIngredients.DoesNotExist:
+            return JsonResponse({"status": "error"})
+        
+def remove_ccart(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        try:
+            item = CustomIngredients.objects.get(
+                id=data['cart_id'],
+                customer=request.user
+            )
+            item.delete()
+            return JsonResponse({"status": "success"})
+        except CustomIngredients.DoesNotExist:
+            return JsonResponse({"status": "error"})
+        
+def smoothie_detail(request, id):
+    smoothie = Smoothie.objects.get(id=id)
+    reviews = smoothie.reviews.all()
+
+    if request.method == "POST":
+        rating = int(request.POST.get("rating"))
+        comment = request.POST.get("comment")
+
+        Review.objects.update_or_create(
+            smoothie=smoothie,
+            customer=request.user,
+            defaults={
+                "rating": rating,
+                "comment": comment
+            }
+        )
+
+    average_rating = reviews.aggregate(
+        Avg('rating')
+    )['rating__avg']
+
+    return render(request, "smoothie_details.html", {
+        "s": smoothie,
+        "reviews": reviews,
+        "average_rating": average_rating
+    })
+    
 # def rate_smoothie(request):
 #     if request.method == "POST":
 #         data = 
@@ -591,7 +679,18 @@ def remove_cart(request):
 
 
     
+from django.shortcuts import render
+from .embedding_engine import recommend_smoothies
 
+def suggestion(request):
+    recommendations = None
+
+    if request.method == "POST":
+        user_query = request.POST.get("query")
+        recommendations = recommend_smoothies(user_query)
+        print(recommendations)
+
+    return render(request, "suggestion.html", {"recommendations": recommendations})
 
 
 
