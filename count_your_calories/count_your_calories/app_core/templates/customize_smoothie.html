@@ -311,9 +311,12 @@ Search
             <span class="price"
                   id="price-{{i.id}}"
                   data-price="{{i.price}}">
-                  <h6>kcal {{i.calorie}}<br>₹{{i.price}}</h6>
-                 
+                  <h6>₹{{i.price}}</h6>
             </span>
+              <span class="calorie" 
+      id="calorie-{{i.id}}" 
+      data-calorie="{{i.calorie}}">
+     {{i.calorie}} kcal</span>
 
             <div class="d-flex align-items-center justify-content-between">
 
@@ -365,11 +368,16 @@ Search
 
           <ul class="list-group mb-3">
             <li class="list-group-item d-flex justify-content-between lh-sm cart-item"
-                data-price="{{ i.ingredients.price }}"
-                data-id="{{ i.id }}">
+    data-price="{{ i.ingredients.price }}"
+    data-calorie="{{ i.ingredients.calorie }}"
+    data-id="{{ i.id }}">
 
               <div>
-                <h6 class="my-0">{{ i.ingredients.name }}</h6>
+  <h6 class="my-0">{{ i.ingredients.name }}</h6>
+
+  <small class="text-muted item-calorie">
+    {{ i.ingredients.calorie|floatformat:0 }} kcal
+  </small>
 
                 <div class="input-group product-qty">
 
@@ -409,6 +417,9 @@ Search
 
           <h5 class="text-center">
             ₹ <span id="cart-total">{{ t }}</span>
+            <h6 class="text-center mt-2">
+ Total Calories: <span id="total-calorie">0</span> kcal
+</h6>
           </h5>
 
           <a href="{% url 'app_core:booking' 'custom' %}">
@@ -643,6 +654,90 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
+<!-- card calorie -->
+<script>
+
+document.querySelectorAll(".btn-number").forEach(button => {
+
+    button.addEventListener("click", function(){
+
+        let product = this.closest(".product-item");
+
+        let input = product.querySelector(".input-number");
+        let calorie = product.querySelector(".calorie");
+
+        let qty = parseInt(input.value);
+        let baseCalorie = parseFloat(calorie.dataset.calorie);
+
+        if(this.dataset.type === "plus"){
+            qty = qty + 1;
+        }
+
+        if(this.dataset.type === "minus" && qty > 100){
+            qty = qty - 1;
+        }
+
+        input.value = qty;
+
+        // calculate calories
+        let totalCalorie = (baseCalorie * qty) / 100;
+
+        calorie.innerText = totalCalorie + " kcal";
+
+    });
+
+});
+
+</script>
+
+<script>
+
+function updateCartCalories() {
+
+    let totalCalories = 0;
+
+    document.querySelectorAll(".cart-item").forEach(item => {
+
+        let calorie = parseFloat(item.dataset.calorie);
+        let qty = parseInt(item.querySelector(".input-number").value);
+
+        let itemCalorie = (calorie * qty) / 100;
+
+        item.querySelector(".item-calorie").innerText = itemCalorie.toFixed(0) + " kcal";
+
+        totalCalories += itemCalorie;
+
+    });
+
+    document.getElementById("total-calorie").innerText = totalCalories.toFixed(0);
+}
+
+document.querySelectorAll(".btn-number").forEach(button => {
+
+    button.addEventListener("click", function(){
+
+        let input = this.closest(".product-qty").querySelector(".input-number");
+        let qty = parseInt(input.value);
+
+        if(this.dataset.type === "plus"){
+            qty += 1;
+        }
+
+        if(this.dataset.type === "minus" && qty > 100){
+            qty -= 1;
+        }
+
+        input.value = qty;
+
+        updateCartCalories();
+    });
+
+});
+
+updateCartCalories();
+
+</script>
+
 
     {%include "layout/partials/customer/wfooter.html" %}
 

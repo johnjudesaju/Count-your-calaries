@@ -11,6 +11,11 @@
                         <h3>{{i.name}}</h3>
                         <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
                         <span class="price" id="price-{{i.id}}" data-price="{{i.price}}">{{i.price}}</span>
+                        <span class="calorie" 
+      id="calorie-{{i.id}}" 
+      data-calorie="{{i.calorie}}">
+     {{i.calorie}} kcal
+</span>
                         <form action="{% url 'app_core:cust_smoothie' %}" method="POST">
                          {% csrf_token %}
                          <input type="hidden" name="id" value="{{i.id}}">
