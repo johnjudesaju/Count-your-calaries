@@ -1,37 +1,46 @@
 {% for i in custsview %}
-                    <div class="col">
-                      <div class="product-item">
-                        <span class="badge bg-success position-absolute m-3">-30%</span>
-                        <a href="{% url 'app_core:add_fav' i.id%}" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                        <figure>
-                          <a href="{% url 'app_core:s_details' i.id %}" title="Product Title">
-                            <img src="/media/{{i.simg}}"  class="tab-image">
-                          </a>
-                        </figure>
-                        <h3>{{i.name}}</h3>
-                        <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                        <span class="price" id="price-{{i.id}}" data-price="{{i.price}}">{{i.price}}</span>
-                        <form action="{% url 'app_core:cust_smoothie' %}" method="POST">
-                         {% csrf_token %}
-                         <input type="hidden" name="id" value="{{i.id}}">
-                         <input type="hidden" name="price" id="amount-{{i.id}}" value="{{i.price}}">
-                        <div class="d-flex align-items-center justify-content-between">
-                          <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                              </span>
-                              <input type="text" id="quantity-{{i.id}}" name="quantity" class="form-control input-number" value="1" data-id="{{i.id}}">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                              </span>
-                          </div>
-                          <button type="submit" class="btn btn-primary"> Add to cart </button><iconify-icon icon="uil:shopping-cart">
-                        </div>
-                        </form>
-                      </div>
-                    </div>
-                    {% endfor %}
+<div class="col">
+  <div class="product-item">
+    <span class="badge bg-success position-absolute m-3">-30%</span>
+    <a href="{% url 'app_core:add_fav' i.id%}" class="btn-wishlist"><svg width="24" height="24">
+        <use xlink:href="#heart"></use>
+      </svg></a>
+    <figure>
+      <a href="{% url 'app_core:s_details' i.id %}" title="Product Title">
+        <img src="/media/{{i.simg}}" class="tab-image">
+      </a>
+    </figure>
+    <h3>{{i.name}}</h3>
+    <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary">
+        <use xlink:href="#star-solid"></use>
+      </svg> {% if i.avg_rating %}{{ i.avg_rating|floatformat:1 }}{% else %}N/A{% endif %}</span>
+    <span class="price" id="price-{{i.id}}" data-price="{{i.price}}">{{i.price}}</span>
+    <form action="{% url 'app_core:cust_smoothie' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="id" value="{{i.id}}">
+      <input type="hidden" name="price" id="amount-{{i.id}}" value="{{i.price}}">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="input-group product-qty">
+          <span class="input-group-btn">
+            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+              <svg width="16" height="16">
+                <use xlink:href="#minus"></use>
+              </svg>
+            </button>
+          </span>
+          <input type="text" id="quantity-{{i.id}}" name="quantity" class="form-control input-number" value="1"
+            data-id="{{i.id}}">
+          <span class="input-group-btn">
+            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+              <svg width="16" height="16">
+                <use xlink:href="#plus"></use>
+              </svg>
+            </button>
+          </span>
+        </div>
+        <button type="submit" class="btn btn-primary"> Add to cart </button><iconify-icon icon="uil:shopping-cart">
+      </div>
+    </form>
+  </div>
+</div>
+{% endfor %}

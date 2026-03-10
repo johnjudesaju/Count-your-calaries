@@ -299,7 +299,7 @@ def delv_v(request):
 def cust_smoothieview(request):
     # Category filtering
     
-    s = Smoothie.objects.all()
+    s = Smoothie.objects.all().annotate(avg_rating=Avg('review__rating'))
     
     category = request.GET.get('category')
     search=request.GET.get('search')
@@ -308,15 +308,13 @@ def cust_smoothieview(request):
         s = s.filter(name__icontains=search)
     if category:
         s = s.filter(category_id=category)
+    
     if sort == "price_asc":
         s = s.order_by('price')
-
     elif sort == "price_desc":
         s = s.order_by('-price')
-
     elif sort == "calorie_asc":
         s = s.order_by('calorie')
-
     elif sort == "calorie_desc":
         s = s.order_by('-calorie')
     # Add to cart
