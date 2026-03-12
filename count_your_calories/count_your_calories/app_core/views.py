@@ -9,6 +9,7 @@ from app_dashboard.models import Customer, Deliverydetails
 from count_your_calories.users.models import User
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
 #from count_your_calories.app_dashboard.models import customer
 #from count_your_calories.users.models import User
@@ -295,7 +296,7 @@ def delv_v(request):
     l=Delivery.objects.filter(status="accept")
     return render (request, "delvv.html",{"dv":l})
 
-# 
+@login_required
 def cust_smoothieview(request):
     # Category filtering
     
@@ -357,6 +358,7 @@ def cust_smoothieview(request):
         }
     )
 
+@login_required
 def custz_smoothie(request):
     i=Ingredients.objects.all()
     search=request.GET.get('search')
@@ -364,7 +366,7 @@ def custz_smoothie(request):
 
     if search:
         i = i.filter(name__icontains=search)
-        
+
     if sort == "price_asc":
         i = i.order_by('price')
 
@@ -394,7 +396,8 @@ def custz_smoothie(request):
     cn=CustomIngredients.objects.filter(customer=request.user,customMaster_id__isnull=True).count()
     total_amount = cr.aggregate(total=Sum('price'))['total'] or 0
     return render (request, "customize_smoothie.html",{"custzview":i,"cr":cr,"cn":cn,"t":total_amount})
-    
+
+@login_required    
 def add_fav(request,no):
     f=Favourite()
     f.customer=request.user
@@ -402,6 +405,7 @@ def add_fav(request,no):
     f.save()
     return HttpResponse("<script>alert('added to fav');window.location='/core/cust_smoothie';</script>")
 
+@login_required
 def fav(request):
     f=Favourite.objects.filter(customer=request.user)
     cn=Favourite.objects.filter(customer=request.user).count()

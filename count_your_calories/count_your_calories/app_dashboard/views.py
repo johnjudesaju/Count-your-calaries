@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.contrib import messages
 from app_core.models import Booking, Cart, Category, Delivery, Deliveryupdate, District, Location, Smoothie
 from django.contrib.auth import authenticate,login
 from django.core.mail import send_mail
@@ -53,25 +54,41 @@ def index(request):
     return render(request, "Customer_dash.html", {"c": s,"top": top_smoothies})
 
 def log(request):
-    if request.method == 'POST':
-        uname=request.POST.get("uname")
-        passwd=request.POST.get("passwd")
-        user=authenticate(request,username=uname,password=passwd)
+    if request.method == "POST":
+        uname = request.POST.get("uname")
+        passwd = request.POST.get("passwd")
+
+        user = authenticate(request, username=uname, password=passwd)
+
         if user is not None:
-            login(request,user)
-            if user.role == 'Admin':
-                return HttpResponse ("<script>alert('Login sucessfull');window.location='/adm/';</script>")
-            elif user.role == 'customer':
-                return HttpResponse ("<script>alert('Login sucessfull');window.location='/core/cust_smoothie/';</script>")
-            elif user.role == 'delivery':
-                d=Delivery.objects.get(user=user)
-                if d.status=="accept":
-                    return HttpResponse ("<script>alert('Login sucessfull');window.location='/delv_dash/';</script>")
-                else:
-                    return HttpResponse ("<script>alert('Login unsucessfull');window.location='/log/';</script>")
+            login(request, user)
+            messages.success(request, "Login successful")
+
+            if user.role == "Admin":
+                return redirect("/adm/")
+
+            elif user.role == "customer":
+                return redirect("/core/cust_smoothie/")
+
+            elif user.role == "delivery":
+                try:
+                    d = Delivery.objects.get(user=user)
+
+                    if d.status == "accept":
+                        return redirect("/delv_dash/")
+                    else:
+                        messages.error(request, "Delivery account not approved yet")
+                        return redirect("/log/")
+
+                except Delivery.DoesNotExist:
+                    messages.error(request, "Delivery profile not found")
+                    return redirect("/log/")
+
         else:
-            return HttpResponse ("<script>alert('Login unsucessfull');window.location='/log/';</script>")
-    return render (request, "login.html")
+            messages.error(request, "Invalid username or password")
+            return redirect("/log/")
+
+    return render(request, "login.html")
 
 
 def guest(request):
@@ -110,7 +127,7 @@ def customer_reg(request):
         c.user=User.objects.get(username=uname)
         c.save()
         send_mail(subject="Registation Sucessfull", message=f"hi {name},\n welcome to Count your Calories" ,from_email=None,recipient_list=[email])
-        return HttpResponse("<script>alert('Insertion sucessfull');window.location='/reg';</script>")
+        return HttpResponse("<script>alert('Registration sucessfull');window.location='/log';</script>")
     else:
         return render(request, "c_registration.html")
 
