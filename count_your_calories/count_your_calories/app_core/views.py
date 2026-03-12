@@ -407,7 +407,7 @@ def add_fav(request,no):
 
 @login_required
 def fav(request):
-    f=Favourite.objects.filter(customer=request.user)
+    f=Favourite.objects.filter(customer=request.user).annotate(avg_rating=Avg('smoothie__reviews__rating'))
     cn=Favourite.objects.filter(customer=request.user).count()
     return render (request, "favorite.html",{"f":f,"cn":cn})
 
