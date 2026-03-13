@@ -300,7 +300,7 @@ def delv_v(request):
 def cust_smoothieview(request):
     # Category filtering
     
-    s = Smoothie.objects.all().annotate(avg_rating=Avg('review__rating'))
+    s = Smoothie.objects.all().annotate(avg_rating=Avg('reviews__rating'))
     
     category = request.GET.get('category')
     search=request.GET.get('search')
@@ -407,7 +407,7 @@ def add_fav(request,no):
 
 @login_required
 def fav(request):
-    f=Favourite.objects.filter(customer=request.user)
+    f=Favourite.objects.filter(customer=request.user).annotate(avg_rating=Avg('smoothie__reviews__rating'))
     cn=Favourite.objects.filter(customer=request.user).count()
     return render (request, "favorite.html",{"f":f,"cn":cn})
 
@@ -603,7 +603,6 @@ def remove_ccart(request):
         
 def smoothie_detail(request, id):
     smoothie = Smoothie.objects.get(id=id)
-    reviews = smoothie.reviews.all()
 
     if request.method == "POST":
         rating = int(request.POST.get("rating"))
@@ -617,7 +616,8 @@ def smoothie_detail(request, id):
                 "comment": comment
             }
         )
-
+    
+    reviews = smoothie.reviews.all()
     average_rating = reviews.aggregate(
         Avg('rating')
     )['rating__avg']

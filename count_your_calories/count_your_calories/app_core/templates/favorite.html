@@ -1,68 +1,81 @@
-    {% load static %}   
-    {%include "layout/partials/customer/wheader.html" %}  
-      <center><h2>Favourites</h2></center><br>
-                <!-- <div class="tab-pane fade" id="nav-fruits" role="tabpanel" aria-labelledby="nav-fruits-tab"> -->   
-                  <form action="{% url 'app_core:custz_smoothie' %}" method="POST">
-                    {% csrf_token %}         
-                  <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-                    {% for i in f %}
-                    <div class="col">
-                      <div class="product-item">
-                        <span class="badge bg-success position-absolute m-3">-30%</span>
-                        <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                        <figure>
-                          <a href="index.html" title="Product Title">
-                            <img src="/media/{{i.smoothie.simg}}"  class="tab-image">
-                          </a>
-                        </figure>
-                        <input type="hidden" name="id" value="{{i.id}}">
-                         <input type="hidden" name="price" value="{{i.price}}">
-                        <h3>{{i.name}}</h3>
-                        <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                        <span class="price">{{i.smoothie.price}}</span>
-                        <div class="d-flex align-items-center justify-content-between">
-                          <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                              </span>
-                              <input type="text" id="quantity" name="quantity" class="form-control input-number" value="50">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                              </span>
-                          </div>
-                           <button type="submit" class="btn btn-primary"> Add to cart </button><iconify-icon icon="uil:shopping-cart"></iconify-icon>
-                        </div>
-                      </div>
-                    </div>
-                    {% endfor %}
-                    </form>
-                  </div>
-                  <!-- / product-grid -->               
-    <!-- <div class="offcanvas-header justify-content-center">
+{% load static %}
+{%include "layout/partials/customer/wheader.html" %}
+<center>
+  <h2>Favourites</h2>
+</center><br>
+<!-- <div class="tab-pane fade" id="nav-fruits" role="tabpanel" aria-labelledby="nav-fruits-tab"> -->
+<form action="{% url 'app_core:custz_smoothie' %}" method="POST">
+  {% csrf_token %}
+  <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+    {% for i in f %}
+    <div class="col">
+      <div class="product-item">
+        <span class="badge bg-success position-absolute m-3">-30%</span>
+        <a href="#" class="btn-wishlist"><svg width="24" height="24">
+            <use xlink:href="#heart"></use>
+          </svg></a>
+        <figure>
+          <a href="index.html" title="Product Title">
+            <img src="/media/{{i.smoothie.simg}}" class="tab-image">
+          </a>
+        </figure>
+        <input type="hidden" name="id" value="{{i.id}}">
+        <input type="hidden" name="price" value="{{i.price}}">
+        <h3>{{i.name}}</h3>
+        <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary">
+            <use xlink:href="#star-solid"></use>
+          </svg> {{ i.avg_rating|default:0|floatformat:1 }}</span>
+        <span class="price">{{i.smoothie.price}}</span>
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="input-group product-qty">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+                <svg width="16" height="16">
+                  <use xlink:href="#minus"></use>
+                </svg>
+              </button>
+            </span>
+            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="50">
+            <span class="input-group-btn">
+              <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+                <svg width="16" height="16">
+                  <use xlink:href="#plus"></use>
+                </svg>
+              </button>
+            </span>
+          </div>
+          <button type="submit" class="btn btn-primary"> Add to cart </button><iconify-icon
+            icon="uil:shopping-cart"></iconify-icon>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</form>
+</div>
+<!-- / product-grid -->
+<!-- <div class="offcanvas-header justify-content-center">
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div> -->
-      <div class="offcanvas-body">
-        <div class="order-md-last">
-          <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Your Smoothie</span>
-            <span class="badge bg-primary rounded-pill">{{cn}}</span>
-          </h4>
-          {% for i in cr %}
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">{{i.ingredients.name}}</h6>
-                
-              <span class="text-body-secondary">{{i.price}}</span>
-            </li>
-          </ul>
-          {% endfor %}
-         <h5> <p style="text-align: center;">{{t}}&nbsp;&nbsp;</p></h>
-          <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
-        </div>
-      </div>              
-    {%include "layout/partials/customer/wfooter.html" %}
+<div class="offcanvas-body">
+  <div class="order-md-last">
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-primary">Your Smoothie</span>
+      <span class="badge bg-primary rounded-pill">{{cn}}</span>
+    </h4>
+    {% for i in cr %}
+    <ul class="list-group mb-3">
+      <li class="list-group-item d-flex justify-content-between lh-sm">
+        <div>
+          <h6 class="my-0">{{i.ingredients.name}}</h6>
+
+          <span class="text-body-secondary">{{i.price}}</span>
+      </li>
+    </ul>
+    {% endfor %}
+    <h5>
+      <p style="text-align: center;">{{t}}&nbsp;&nbsp;</p>
+      </h>
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+  </div>
+</div>
+{%include "layout/partials/customer/wfooter.html" %}
